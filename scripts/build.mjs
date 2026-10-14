@@ -16,7 +16,6 @@ const CACHE = path.join(ROOT, 'node_modules', '.cache', 'site-images');
 
 // The design's own artwork (from the mockup export), published as-is.
 const DESIGN_ASSETS = [
-  'f05492ec891399551d0d42fc240f9050.jpg', // hero sky
   '8dfd1009f928f38a1da1c44d98d911f0.png', // "Preeti K" lettering
   '4c8ac84f9eb2c9da7b1628f5982e474f.png', // tiger, left
   'c5f0d00dfc921d646234c29ada3bc6f1.png', // tiger, right
@@ -72,23 +71,6 @@ async function makeBranch(src, out) {
     .composite([{ input: cut, left: BRANCH.left, top: BRANCH.top }]).png({ compressionLevel: 9 }).toFile(out);
 }
 
-// If an extended (wider) version of the hero painting is provided at
-// images/design/hero-wide.jpg, use it instead of the original + blurred sides.
-export const HERO = { original: 'assets/f05492ec891399551d0d42fc240f9050.jpg', wide: 'hero-wide.jpg' };
-export async function useWideHero(root, assetsOut, html) {
-  const src = path.join(root, 'images', 'design', HERO.wide);
-  if (!fs.existsSync(src)) return html;
-  const sharp = (await import('sharp')).default;
-  const { width, height } = await sharp(src).metadata();
-  // web copy: 2400px tall is plenty for the 165%-tall hero; metadata stripped
-  await sharp(src).rotate().resize({ height: Math.min(height, 2400), withoutEnlargement: true }).jpeg({ quality: 86, mozjpeg: true }).toFile(path.join(assetsOut, HERO.wide));
-  const fill = /s*<img class="hero-fill"[^>]*>/;
-  const bg = `<img class="hero-bg" src="${HERO.original}" width="735" height="1019"`;
-  if (!fill.test(html) || !html.includes(bg)) throw new Error('site/index.html: hero markup changed; update useWideHero in scripts/build.mjs');
-  return html.replace(fill, '').replace(bg, `<img class="hero-bg" src="assets/${HERO.wide}" width="${width}" height="${height}" style="aspect-ratio:${width}/${height}"`)
-    .replace(`<link rel="preload" as="image" href="${HERO.original}"`, `<link rel="preload" as="image" href="assets/${HERO.wide}"`);
-}
-
 export async function build({ root = ROOT, dist = DIST, log = console.log } = {}) {
   const { collections, errors } = loadContent(root);
   if (errors.length) {
@@ -118,6 +100,10 @@ export async function build({ root = ROOT, dist = DIST, log = console.log } = {}
     await makeGlow(path.join(root, 'assets', file), path.join(assetsOut, out));
   }
 
+  // The hero night field (the extended 2000 x 2000 painting): web copy, metadata stripped.
+  await (await import('sharp')).default(path.join(root, 'assets', 'blue_nightscape_2000x2000.png'))
+    .jpeg({ quality: 82, mozjpeg: true, progressive: true }).toFile(path.join(assetsOut, 'hero-night.jpg'));
+
   await makeBranch(path.join(root, 'images', 'design', 'plum-branch.jpg'), path.join(assetsOut, 'wind-branch.png'));
 
   // content images
@@ -137,7 +123,6 @@ export async function build({ root = ROOT, dist = DIST, log = console.log } = {}
 
   const template = fs.readFileSync(path.join(root, 'site', 'index.html'), 'utf8');
   let html = renderPage(template, { collections, tomImgs, cardImgs, optionImgs, buildId: Date.now().toString(36) });
-  html = await useWideHero(root, assetsOut, html);
   fs.writeFileSync(path.join(dist, 'index.html'), html);
 
   // The postcard API only accepts pictures that are on the site.

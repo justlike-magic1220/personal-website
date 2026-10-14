@@ -22,9 +22,7 @@ a{color:#eef3ff}a:hover{color:#ffffff}
 /* ---------- 01 · hero ---------- */
 .hero{position:relative;height:2300px;background:#04060c;--p:0;--a:0;--g:0;--d:0;--mx:300;--rise:80;--dy:700;--arc:0}
 .hero-stick{position:sticky;top:0;height:100svh;min-height:600px;max-height:1440px;overflow:hidden;background:#000}
-.hero-bg{position:absolute;left:50%;top:0;width:auto;max-width:none;height:165%;aspect-ratio:735/1019;transform:translate(-50%,calc(var(--p) * -39%));will-change:transform;-webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,0),#000 7%,#000 93%,rgba(0,0,0,0));mask-image:linear-gradient(90deg,rgba(0,0,0,0),#000 7%,#000 93%,rgba(0,0,0,0))}
-.hero-fill{display:none;position:absolute;left:0;top:0;width:100%;height:165%;object-fit:fill;filter:blur(36px) saturate(1.05);transform:translateY(calc(var(--p) * -39%)) scale(1.15);transform-origin:50% 50%;will-change:transform}
-@media (min-aspect-ratio:1/1){.hero-fill{display:block}}
+.hero-bg{position:absolute;left:0;top:0;width:100%;height:165%;object-fit:cover;object-position:50% 0;transform:translateY(calc(var(--p) * -39%));will-change:transform}
 .hero-blur{position:absolute;left:0;right:0;bottom:0;height:62%;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);-webkit-mask-image:linear-gradient(rgba(0,0,0,0),#000 70%);mask-image:linear-gradient(rgba(0,0,0,0),#000 70%);opacity:calc(var(--d) * 1.2);pointer-events:none;z-index:4}
 .hero-shade{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55) 45%,#000 92%);opacity:calc(.3 + var(--d) * .7);pointer-events:none;z-index:4}
 .hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:#000}
@@ -255,3 +253,4 @@ fieldset.field{margin:14px 0 0;padding:0;border:0;min-width:0}
 fieldset.field legend{padding:0;margin-bottom:6px}
 /* padding % resolves against the section, not the bubble; use 13% of the bubble's own width */
 .wind-body .aside .bubble{padding:calc(min(370px,80vw) * .13)}
+img[src$="wind-branch.png"]{transform-origin:42.46% 100%}

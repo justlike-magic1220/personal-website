@@ -348,6 +348,8 @@ const WIND = [
 ];
 const wind = $('#wind'), stage = $('.stage', wind), floaters = $('.floaters', wind), bubble = $('.bubble', wind);
 const tps = $$('.tp', wind), rbg = $$('.rbg', wind);
+const branches = $$('img[src$="wind-branch.png"]', wind);
+const TRUNK_X = 625; // trunk base in the branch picture's 1472 x 952 space
 let windOpen = null, windOpener = null;
 
 function openWind(i, opener) {
@@ -394,7 +396,9 @@ function windFrame(now) {
     tp.setAttribute('startOffset', (-(7 + 7 * Math.sin(t * 0.22 * sp + k * 1.7))).toFixed(2) + '%');
   });
   const sway = Math.sin(t * 0.6) * 0.5;
-  rbg.forEach((g) => g.setAttribute('transform', `rotate(${sway.toFixed(3)} 490 952)`));
+  // the branch and its sentences sway together, pivoting at the trunk's base
+  rbg.forEach((g) => g.setAttribute('transform', `rotate(${sway.toFixed(3)} ${TRUNK_X} 952)`));
+  branches.forEach((b) => { b.style.transform = `rotate(${sway.toFixed(3)}deg)`; });
   return true;
 }
 
@@ -406,7 +410,20 @@ function sizeCanvases() {
     c.width = Math.round(c.clientWidth * dpr); c.height = Math.round(c.clientHeight * dpr); c._dpr = dpr;
   }
 }
+// The hero painting is square and covers a box 165% as tall as the screen. On wide
+// screens it is scaled by width, leaving extra height to crop: crop from the top so
+// the first screen ends ~60% down the painting (just below the hills and village
+// lights), like the original composition, without ever cropping the field's bottom.
+function frameHero() {
+  const bg = $('.hero-bg'); if (!bg) return;
+  const W = bg.clientWidth, B = bg.clientHeight, H = stick.clientHeight;
+  const ratio = (bg.naturalWidth || 2000) / (bg.naturalHeight || 2000);
+  const shown = Math.max(B, W / ratio); // displayed image height under object-fit: cover
+  const crop = Math.max(0, Math.min(0.6 * shown - H, shown - B));
+  bg.style.objectPosition = `50% ${(-crop).toFixed(1)}px`;
+}
 function onResize() {
+  frameHero();
   lensIn.style.width = stage.clientWidth * 2.3 + 'px';
   lensIn.style.height = stage.clientHeight * 2.3 + 'px';
   // magnified copy of the section's sky, lined up with the real one (lens zoom is 2.3x)
