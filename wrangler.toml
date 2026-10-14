@@ -1,11 +1,11 @@
 # Cloudflare Pages configuration. https://developers.cloudflare.com/pages/functions/wrangler-configuration/
-name = "preetik"
+name = "preetikoti"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-09-01"
 
-# Visitor postcards (free D1 database). database_id is filled in by DEPLOY.md step 3.
+# Visitor postcards (free D1 database). Free D1 database, APAC region.
 [[d1_databases]]
 binding = "DB"
 database_name = "preetik-postcards"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "50cec203-be0e-400e-91a0-60cdbb3d1b7e"
 migrations_dir = "migrations"

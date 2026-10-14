@@ -6,3 +6,4 @@ dist/
 IomPictures/
 *.log
 functions/_generated/
+.admin-password.txt

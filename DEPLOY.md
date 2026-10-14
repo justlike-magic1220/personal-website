@@ -32,24 +32,24 @@ There is no server to run: once published, the site works without your laptop.
 1. Log in to Cloudflare from the terminal (opens your browser to approve):
    `npx wrangler login`
 2. Create the Pages project (pick the free `*.pages.dev` name):
-   `npx wrangler pages project create preetik --production-branch main`
+   `npx wrangler pages project create preetikoti --production-branch main`
 3. Create the database and copy the `database_id` it prints into `wrangler.toml`:
    `npx wrangler d1 create preetik-postcards`
 4. Create the postcards table:
    `npm run db:setup`
 5. Set the two secrets (you'll be asked to paste each value):
-   `npx wrangler pages secret put ADMIN_PASSWORD --project-name preetik` (a long password; store it in your password manager)
-   `npx wrangler pages secret put IP_SALT --project-name preetik` (any long random text)
+   `npx wrangler pages secret put ADMIN_PASSWORD --project-name preetikoti` (a long password; store it in your password manager)
+   `npx wrangler pages secret put IP_SALT --project-name preetikoti` (any long random text)
 6. Publish: `npm run deploy`
 
 Then add the D1 binding in case the dashboard doesn't pick it up from `wrangler.toml`:
-Cloudflare dashboard → Workers & Pages → preetik → Settings → Bindings → D1 database: name `DB`, database `preetik-postcards`.
+Cloudflare dashboard → Workers & Pages → preetikoti → Settings → Bindings → D1 database: name `DB`, database `preetik-postcards`.
 
 ## Rolling back
 
 If an update breaks something:
 
-- **Fastest:** Cloudflare dashboard → **Workers & Pages → preetik → Deployments**. Find the last good deployment, open its **⋯** menu and choose
+- **Fastest:** Cloudflare dashboard → **Workers & Pages → preetikoti → Deployments**. Find the last good deployment, open its **⋯** menu and choose
   **Rollback to this deployment**. The live site switches back in seconds.
 - **Fix in the files:** every published version is also committed to the local Git repository. `git log --oneline` lists versions;
   `git restore --source <version> -- content images` brings back old content, then `npm run deploy`.
@@ -75,5 +75,5 @@ Cloudflare's [Acceptable Use Policy](https://www.cloudflare.com/website-terms/) 
 ## Custom domain (optional, costs money)
 
 The site starts on the free `https://<project>.pages.dev` address. A custom domain (e.g. `preetikoti.com`) has a yearly registration fee.
-Connecting it to Cloudflare Pages is free: dashboard → preetik → **Custom domains → Set up a domain**, then follow the DNS steps.
+Connecting it to Cloudflare Pages is free: dashboard → preetikoti → **Custom domains → Set up a domain**, then follow the DNS steps.
 HTTPS certificates are automatic.
