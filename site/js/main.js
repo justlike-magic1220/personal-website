@@ -54,10 +54,11 @@ function heroFrame(now) {
   if (digitsOn) { clearCanvas('.tg-cv-l'); clearCanvas('.tg-cv-r'); digitsOn = false; }
   return false;
 }
-function clearCanvas(sel) { const c = $(sel); if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height); }
+// The digit canvases are hidden whenever they're not in use, so a stale frame can never show over the tiger.
+function clearCanvas(sel) { const c = $(sel); if (c) { c.getContext('2d').clearRect(0, 0, c.width, c.height); c.classList.remove('on'); } }
 function drawDigits(sel, grid, iw, g, d, now) {
   const c = $(sel); if (!c || !c.width) return;
-  digitsOn = true;
+  digitsOn = true; c.classList.add('on');
   const ctx = c.getContext('2d'), W = c.width, H = c.height;
   ctx.clearRect(0, 0, W, H);
   const ox = W * 0.1875, oy = H * 0.1875, bw = W * 0.625, bh = H * 0.625;
@@ -83,6 +84,16 @@ function drawDigits(sel, grid, iw, g, d, now) {
 /* ---------------- 02 · Thread Theory: 3D index ---------------- */
 const scene = $('.scene'), note = $('.th-note');
 const tnEls = $$('.tn', scene);
+// The sphere is laid out inside a box with the reference (tablet) proportions,
+// so wide screens don't stretch it into a flat band. Pictures are sized from that
+// box, and stop growing past PIC_BASE so they stay small on big screens.
+const SCENE_RATIO = 0.84, PIC_BASE = 1100;
+let sphereW = 0;
+function sizeSphere() {
+  sphereW = Math.min(scene.clientWidth, scene.clientHeight / SCENE_RATIO);
+  const base = Math.min(sphereW, PIC_BASE);
+  tnEls.forEach((el, i) => { el.style.width = ((NODES[i].bw / 100) * base).toFixed(1) + 'px'; });
+}
 const cam = { yaw: 0.35, pitch: -0.12, k: 1, vy: 0, vp: 0, tYaw: null, tPitch: null, tK: 1 };
 let active = null, dragInfo = null, justDragged = false, dragging = false;
 
@@ -129,7 +140,7 @@ function threadFrame() {
   c.k += (c.tK - c.k) * 0.07;
   c.pitch = Math.max(-0.9, Math.min(0.9, c.pitch));
   const W = scene.clientWidth, H = scene.clientHeight, cx = W / 2, cy = H * 0.39;
-  const Rx = W * 0.43, Ry = H * 0.34, f = 2.4;
+  const Rx = sphereW * 0.43, Ry = H * 0.34, f = 2.4;
   const cyw = Math.cos(c.yaw), syw = Math.sin(c.yaw), cp = Math.cos(c.pitch), sp = Math.sin(c.pitch);
   const girl = $('.girl', scene), gr = girl.getBoundingClientRect(), sr = scene.getBoundingClientRect();
   const hx = gr.left - sr.left + gr.width * 0.37, hy = gr.top - sr.top + gr.height * 0.01;
@@ -374,10 +385,11 @@ function sizeCanvases() {
 function onResize() {
   lensIn.style.width = stage.clientWidth * 2.3 + 'px';
   lensIn.style.height = stage.clientHeight * 2.3 + 'px';
-  sizeCanvases(); kick();
+  sizeSphere(); sizeCanvases(); kick();
 }
 window.addEventListener('scroll', kick, { passive: true });
 window.addEventListener('resize', onResize);
+window.addEventListener('pageshow', (e) => { if (e.persisted) onResize(); });
 reduceMotion.addEventListener?.('change', kick);
 // Fonts change the digit glyphs; redraw once they're ready.
 document.fonts?.ready.then(kick);

@@ -37,7 +37,7 @@ export function renderPage(template, { collections, tomImgs, cardImgs, optionImg
   const nodes = buildNodes(collections['theory-of-the-mind'], tomImgs);
   const options = collections['postcard-options'];
   const data = {
-    nodes: nodes.map((n) => ({ title: n.title, caption: n.caption || '', kind: n.kind, x: r3(n.x), y: r3(n.y), z: r3(n.z) })),
+    nodes: nodes.map((n) => ({ title: n.title, caption: n.caption || '', kind: n.kind, x: r3(n.x), y: r3(n.y), z: r3(n.z), bw: n.bw })),
     options: options.map((o) => {
       const v = optionImgs.get(o.id);
       return { id: o.id, alt: o.alt, src: v.src, srcset: v.srcset, width: v.width, height: v.height };

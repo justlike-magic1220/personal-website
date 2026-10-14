@@ -21,8 +21,10 @@ a{color:#eef3ff}a:hover{color:#ffffff}
 
 /* ---------- 01 · hero ---------- */
 .hero{position:relative;height:2300px;background:#04060c;--p:0;--a:0;--g:0;--d:0;--mx:300;--rise:80;--dy:700;--arc:0}
-.hero-stick{position:sticky;top:0;height:100svh;min-height:600px;max-height:980px;overflow:hidden;background:#000}
-.hero-bg{position:absolute;left:0;top:0;width:100%;height:165%;object-fit:cover;object-position:50% 0%;transform:translateY(calc(var(--p) * -39%));will-change:transform}
+.hero-stick{position:sticky;top:0;height:100svh;min-height:600px;max-height:1440px;overflow:hidden;background:#000}
+.hero-bg{position:absolute;left:50%;top:0;width:auto;max-width:none;height:165%;aspect-ratio:735/1019;transform:translate(-50%,calc(var(--p) * -39%));will-change:transform;-webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,0),#000 7%,#000 93%,rgba(0,0,0,0));mask-image:linear-gradient(90deg,rgba(0,0,0,0),#000 7%,#000 93%,rgba(0,0,0,0))}
+.hero-fill{display:none;position:absolute;left:0;top:0;width:100%;height:165%;object-fit:fill;filter:blur(36px) saturate(1.05);transform:translateY(calc(var(--p) * -39%)) scale(1.15);transform-origin:50% 50%;will-change:transform}
+@media (min-aspect-ratio:1/1){.hero-fill{display:block}}
 .hero-blur{position:absolute;left:0;right:0;bottom:0;height:62%;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);-webkit-mask-image:linear-gradient(rgba(0,0,0,0),#000 70%);mask-image:linear-gradient(rgba(0,0,0,0),#000 70%);opacity:calc(var(--d) * 1.2);pointer-events:none;z-index:4}
 .hero-shade{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55) 45%,#000 92%);opacity:calc(.3 + var(--d) * .7);pointer-events:none;z-index:4}
 .hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:#000}
@@ -30,7 +32,7 @@ a{color:#eef3ff}a:hover{color:#ffffff}
 .pk-nav a{color:rgba(238,243,255,.85);text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:0 6px}
 .pk-nav a:hover{color:#ffffff}
 .pk-links{display:flex;flex-wrap:wrap;gap:clamp(2px,1.6vw,22px)}
-.hero-copy{position:absolute;left:0;right:0;top:44%;display:flex;flex-direction:column;align-items:center;gap:clamp(18px,2.6vw,34px);padding:0 16px;z-index:3;transform:translateY(calc(-50% - var(--p) * 120px));opacity:calc(1 - var(--d) * 1.4)}
+.hero-copy{position:absolute;left:0;right:0;top:44%;display:flex;flex-direction:column;align-items:center;gap:clamp(18px,2.6vw,34px);padding:0 16px;z-index:3;transform:translateY(calc(-50% - var(--p) * 120px));opacity:calc(1 - var(--d) * 1.4);will-change:transform,opacity}
 .title-wrap{position:relative;width:clamp(290px,54vw,800px)}
 .title-wrap h1{margin:0}
 .title-img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 14px rgba(205,228,255,.4))}
@@ -46,15 +48,17 @@ a{color:#eef3ff}a:hover{color:#ffffff}
 .tg-in{position:absolute;left:0;top:0;width:100%;height:100%;animation:pkBob 5s ease-in-out infinite}
 .tg.r .tg-in{animation-delay:-2.5s}
 @keyframes pkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-.tg img{position:absolute;left:0;top:0;width:100%;height:100%;opacity:calc(1 - var(--g));filter:drop-shadow(0 8px 26px rgba(120,170,255,.3))}
-.tg canvas{position:absolute;left:-30%;top:-30%;width:160%;height:160%}
+.tg img{position:absolute;left:0;top:0;width:100%;height:100%;opacity:calc(1 - var(--g))}
+.tg img.tg-glow{left:-15%;top:-15%;width:130%;height:130%}
+.tg canvas{position:absolute;left:-30%;top:-30%;width:160%;height:160%;visibility:hidden}
+.tg canvas.on{visibility:visible}
 .cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(235,242,255,.8);z-index:5;opacity:calc(1 - var(--p) * 6)}
 .cue i{display:block;width:1px;height:40px;background:linear-gradient(#ffffff,rgba(255,255,255,0));transform-origin:top;animation:pkCue 2.2s ease-in-out infinite}
 @keyframes pkCue{0%{transform:scaleY(0);opacity:1}55%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
 
 /* ---------- 02 · thread theory ---------- */
 .th{position:relative;background:#000;padding:0}
-.scene{position:relative;width:100%;height:clamp(760px,84vw,1240px);overflow:hidden;background:#000;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.scene{position:relative;width:100%;height:clamp(760px,min(84vw,108svh),1240px);overflow:hidden;background:#000;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .scene.drag{cursor:grabbing}
 .scene-vig{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;box-shadow:inset 0 0 140px 40px #000;z-index:30}
 .th-cv{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2}
@@ -186,7 +190,7 @@ textarea.inp{min-height:110px;resize:vertical;font-family:'Caveat',cursive;font-
 .ft{position:relative;height:clamp(640px,68vw,1040px);background:#9d9b96;overflow:hidden}
 .ft-bg{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;object-position:50% 55%;display:block}
 .ft-haze{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;background:linear-gradient(180deg,#b9c3c3 0%,rgba(172,170,164,.7) 14%,rgba(168,166,160,.42) 34%,rgba(150,148,143,.34) 70%,rgba(60,58,55,.35) 100%)}
-.ft-art{position:absolute;left:14%;top:4%;width:72%;aspect-ratio:871/635}
+.ft-art{position:absolute;left:50%;top:4%;width:min(72%,1060px);aspect-ratio:871/635;transform:translateX(-50%)}
 .ft-art > img{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
 .blr{position:absolute;left:6%;top:56%;width:88%;height:auto;overflow:visible}
 .blr .ln{fill:none;stroke:#ffffff;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
@@ -196,6 +200,9 @@ textarea.inp{min-height:110px;resize:vertical;font-family:'Caveat',cursive;font-
 .ft-made{position:absolute;left:0;right:0;bottom:8%;margin:0;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.25vw,18px);letter-spacing:.32em;text-transform:lowercase;color:#ffffff;text-shadow:0 1px 12px rgba(0,0,0,.45)}
 .ft-bar{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:12px clamp(16px,4vw,48px);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(255,255,255,.9);background:linear-gradient(rgba(20,20,20,0),rgba(20,20,20,.45))}
 
+/* below ~1200px the credits row reaches into the tigers' space; sit them lower,
+   and on short screens size them by height too so they stay in frame */
+@media (max-width:1200px){.tg{top:60%;width:clamp(130px,min(21vw,26svh),320px)}}
 @media (max-width:700px){
   .hero{height:1900px}
   .credits{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -203,7 +210,9 @@ textarea.inp{min-height:110px;resize:vertical;font-family:'Caveat',cursive;font-
   .pk-links a.hide-s{display:none}
   .scene{height:120vw;min-height:520px}
   .girl{height:52%;top:8%}
-  .ft-art{left:4%;width:92%;top:8%}
+  .ft-art{width:92%;top:8%}
+  .tg{top:62%}
+  .ft-tiger{width:46vw}
 }
 @media (prefers-reduced-motion: reduce){
   .tg-in,.star-glow,.cue i,.wdot i::after{animation:none}
@@ -252,7 +261,3 @@ fieldset.field legend{padding:0;margin-bottom:6px}
   mask-image:radial-gradient(ellipse 58% 62% at 40% 58%,#000 22%,rgba(0,0,0,.7) 42%,rgba(0,0,0,.3) 64%,rgba(0,0,0,0) 88%),linear-gradient(90deg,rgba(0,0,0,0),#000 16%,#000 84%,rgba(0,0,0,0)),linear-gradient(180deg,rgba(0,0,0,0),#000 12%,#000 82%,rgba(0,0,0,0));
   mask-composite:intersect;
 }
-/* below desktop the tigers covered the credits; sit them under the text instead */
-@media (max-width:1000px){.tg{top:56%}}
-@media (max-width:700px){.tg{top:62%}}
-@media (max-width:700px){.ft-tiger{width:46vw}}

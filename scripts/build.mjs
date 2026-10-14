@@ -31,6 +31,22 @@ const DESIGN_ASSETS = [
   'fc07336bde0a13387bed01353deeb533.png', // Bengaluru line drawing
 ];
 
+// Equivalent of CSS `drop-shadow(0 8px 26px rgba(120,170,255,.3))` at the tigers'
+// typical size: the picture's outline, blurred and tinted, on a canvas 15% larger
+// on every side (the page places it at 130% of the tiger's box).
+async function makeGlow(src, out) {
+  const sharp = (await import('sharp')).default;
+  const { width: w, height: h } = await sharp(src).metadata();
+  const px = Math.round(w * 0.15), py = Math.round(h * 0.15), dy = Math.round(h * 0.02);
+  // sharp applies operations in a fixed order, so outline+blur and the 30% strength are separate passes
+  const outline = await sharp(src).ensureAlpha().extractChannel(3)
+    .extend({ top: py + dy, bottom: py - dy, left: px, right: px, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .blur(16).png().toBuffer();
+  const alpha = await sharp(outline).linear(0.25, 0).png().toBuffer();
+  await sharp({ create: { width: w + 2 * px, height: h + 2 * py, channels: 3, background: { r: 120, g: 170, b: 255 } } })
+    .joinChannel(alpha).png({ compressionLevel: 9 }).toFile(out);
+}
+
 export async function build({ root = ROOT, dist = DIST, log = console.log } = {}) {
   const { collections, errors } = loadContent(root);
   if (errors.length) {
@@ -52,6 +68,13 @@ export async function build({ root = ROOT, dist = DIST, log = console.log } = {}
   // The Thread Theory figure is a large PNG; a WebP copy is ~6x smaller.
   await (await import('sharp')).default(path.join(root, 'assets', '748f5cf069b44bed6f92f75589938cee.png'))
     .webp({ quality: 88, alphaQuality: 90 }).toFile(path.join(assetsOut, '748f5cf069b44bed6f92f75589938cee.webp'));
+
+  // The tigers' soft blue glow, pre-rendered. Applying it as a live CSS filter to
+  // an element that rotates and fades on every scroll frame caused clipped,
+  // rectangular blue patches in Chrome, so it is baked into an image instead.
+  for (const [file, out] of [['4c8ac84f9eb2c9da7b1628f5982e474f.png', 'tiger-l-glow.png'], ['c5f0d00dfc921d646234c29ada3bc6f1.png', 'tiger-r-glow.png']]) {
+    await makeGlow(path.join(root, 'assets', file), path.join(assetsOut, out));
+  }
 
   // content images
   const variants = async (dir, entries, widths) => {
