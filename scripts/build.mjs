@@ -25,7 +25,6 @@ const DESIGN_ASSETS = [
   'af130bde050ed78e47d1f5023b03e171.jpg', // blank postcard
   'bff07bbafe57ad4f6d35083376076786.jpg', // wind sky
   'bec0fc64f969970283fc685e85fc3714.png', // "Notes from the wind" lettering
-  '3047f4e46c6508b5986bf1f4c5a373a1.jpg', // wind tree
   'ca8690c1eb0259c379bf191f943a1ea5.jpg', // Indiranagar street
   '1656fed37786323a800c992317f7ccd6.jpg', // ink-wash tiger
   'fc07336bde0a13387bed01353deeb533.png', // Bengaluru line drawing
@@ -45,6 +44,49 @@ async function makeGlow(src, out) {
   const alpha = await sharp(outline).linear(0.25, 0).png().toBuffer();
   await sharp({ create: { width: w + 2 * px, height: h + 2 * py, channels: 3, background: { r: 120, g: 170, b: 255 } } })
     .joinChannel(alpha).png({ compressionLevel: 9 }).toFile(out);
+}
+
+// "Notes from the wind": the ink plum branch (images/design/plum-branch.jpg) lifted
+// off its cream paper, on a transparent canvas with the stage's proportions
+// (1472 x 952, the same coordinates as the drifting sentences). The trunk sits
+// where the sentences start, so they still stream out of the branches.
+export const BRANCH = { width: 1472, height: 952, left: 470, top: 0, paper: [237, 232, 226], ink: 18 };
+async function makeBranch(src, out) {
+  const sharp = (await import('sharp')).default;
+  const h = BRANCH.height;
+  const { data, info } = await sharp(src).resize({ height: h }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const [pr, pg, pb] = BRANCH.paper, paperL = 0.299 * pr + 0.587 * pg + 0.114 * pb;
+  const rgba = Buffer.alloc(info.width * info.height * 4);
+  for (let i = 0, j = 0; i < data.length; i += 3, j += 4) {
+    const r = data[i], g = data[i + 1], b = data[i + 2];
+    const l = 0.299 * r + 0.587 * g + 0.114 * b;
+    // how far this pixel is from bare paper (0) towards full ink (1); faint paper grain is dropped
+    let a = (paperL - l) / (paperL - BRANCH.ink);
+    a = a < 0.03 ? 0 : Math.min(1, (a - 0.03) / 0.97);
+    // un-mix the paper so petals keep their own grey instead of a cream fringe
+    const un = (c, p) => (a > 0 ? Math.max(0, Math.min(255, Math.round((c - p * (1 - a)) / a))) : 0);
+    rgba[j] = un(r, pr); rgba[j + 1] = un(g, pg); rgba[j + 2] = un(b, pb); rgba[j + 3] = Math.round(a * 255);
+  }
+  const cut = await sharp(rgba, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer();
+  await sharp({ create: { width: BRANCH.width, height: h, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite([{ input: cut, left: BRANCH.left, top: BRANCH.top }]).png({ compressionLevel: 9 }).toFile(out);
+}
+
+// If an extended (wider) version of the hero painting is provided at
+// images/design/hero-wide.jpg, use it instead of the original + blurred sides.
+export const HERO = { original: 'assets/f05492ec891399551d0d42fc240f9050.jpg', wide: 'hero-wide.jpg' };
+export async function useWideHero(root, assetsOut, html) {
+  const src = path.join(root, 'images', 'design', HERO.wide);
+  if (!fs.existsSync(src)) return html;
+  const sharp = (await import('sharp')).default;
+  const { width, height } = await sharp(src).metadata();
+  // web copy: 2400px tall is plenty for the 165%-tall hero; metadata stripped
+  await sharp(src).rotate().resize({ height: Math.min(height, 2400), withoutEnlargement: true }).jpeg({ quality: 86, mozjpeg: true }).toFile(path.join(assetsOut, HERO.wide));
+  const fill = /s*<img class="hero-fill"[^>]*>/;
+  const bg = `<img class="hero-bg" src="${HERO.original}" width="735" height="1019"`;
+  if (!fill.test(html) || !html.includes(bg)) throw new Error('site/index.html: hero markup changed; update useWideHero in scripts/build.mjs');
+  return html.replace(fill, '').replace(bg, `<img class="hero-bg" src="assets/${HERO.wide}" width="${width}" height="${height}" style="aspect-ratio:${width}/${height}"`)
+    .replace(`<link rel="preload" as="image" href="${HERO.original}"`, `<link rel="preload" as="image" href="assets/${HERO.wide}"`);
 }
 
 export async function build({ root = ROOT, dist = DIST, log = console.log } = {}) {
@@ -76,6 +118,8 @@ export async function build({ root = ROOT, dist = DIST, log = console.log } = {}
     await makeGlow(path.join(root, 'assets', file), path.join(assetsOut, out));
   }
 
+  await makeBranch(path.join(root, 'images', 'design', 'plum-branch.jpg'), path.join(assetsOut, 'wind-branch.png'));
+
   // content images
   const variants = async (dir, entries, widths) => {
     const out = new Map();
@@ -92,7 +136,8 @@ export async function build({ root = ROOT, dist = DIST, log = console.log } = {}
   const optionImgs = await variants('postcard-options', collections['postcard-options'], [320, 640]);
 
   const template = fs.readFileSync(path.join(root, 'site', 'index.html'), 'utf8');
-  const html = renderPage(template, { collections, tomImgs, cardImgs, optionImgs, buildId: Date.now().toString(36) });
+  let html = renderPage(template, { collections, tomImgs, cardImgs, optionImgs, buildId: Date.now().toString(36) });
+  html = await useWideHero(root, assetsOut, html);
   fs.writeFileSync(path.join(dist, 'index.html'), html);
 
   // The postcard API only accepts pictures that are on the site.

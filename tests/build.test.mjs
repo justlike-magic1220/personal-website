@@ -59,3 +59,17 @@ test('the API only accepts the published picture options', async () => {
   const { OPTION_IDS } = await import('../functions/_generated/options.js');
   assert.deepEqual(OPTION_IDS, result.collections['postcard-options'].map((o) => o.id));
 });
+
+test('a wider hero painting, when provided, replaces the original and the blurred sides', async () => {
+  const { useWideHero } = await import('../scripts/build.mjs');
+  const sharp = (await import('sharp')).default;
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pk-hero-'));
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), 'pk-hero-out-'));
+  assert.equal(await useWideHero(root, out, html), html, 'unchanged without a wide image');
+  fs.mkdirSync(path.join(root, 'images', 'design'), { recursive: true });
+  await sharp({ create: { width: 200, height: 100, channels: 3, background: '#123' } }).jpeg().toFile(path.join(root, 'images', 'design', 'hero-wide.jpg'));
+  const wide = await useWideHero(root, out, html);
+  assert.ok(!wide.includes('hero-fill'));
+  assert.match(wide, /class="hero-bg" src="assets\/hero-wide\.jpg" width="200" height="100"/);
+  assert.ok(fs.existsSync(path.join(out, 'hero-wide.jpg')));
+});

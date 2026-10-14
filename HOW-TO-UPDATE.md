@@ -139,3 +139,19 @@ it back later) or **Delete** (tap twice; it's gone for good). The admin page is 
 ```
 
 Fix them and run it again. Nothing can be published while there are problems, so a typo can't break the live site.
+
+---
+
+## Design pictures (`images/design/`)
+
+| File | What it does |
+|---|---|
+| `plum-branch.jpg` | The ink branch in **Notes from the wind**. The build lifts it off its paper automatically, so it must be dark ink on a plain, even, light background. To use a different painting, replace this file (same name) and rebuild. |
+| `hero-wide.jpg` *(optional)* | A wider version of the night-field painting at the top of the page. If this file exists, it's used instead of the original, and the blurred sides on wide screens disappear. |
+
+### Making `hero-wide.jpg`
+1. Open `assets/f05492ec891399551d0d42fc240f9050.jpg` (the original painting) in an AI image tool with a "generative expand" / "outpaint" feature.
+2. Extend the canvas **left and right only** to about **2000 × 1019 pixels** (keep the height). Leave the top and bottom alone.
+3. Prompt along the lines of: *"continue the deep blue night sky with small stars, the distant snowy hills, village lights and the ploughed field rows in the same woodblock-print style"*.
+4. Check the seams: the field rows should keep fanning outwards, and the middle of the picture must be unchanged.
+5. Save it as `images/design/hero-wide.jpg`, then `npm run preview` to check, and `npm run deploy` to publish.

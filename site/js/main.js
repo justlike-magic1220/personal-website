@@ -84,17 +84,23 @@ function drawDigits(sel, grid, iw, g, d, now) {
 /* ---------------- 02 · Thread Theory: 3D index ---------------- */
 const scene = $('.scene'), note = $('.th-note');
 const tnEls = $$('.tn', scene);
+// The scene is the original composition (height H0) plus room above for the
+// threads' curves and room below for the title. Keep in sync with .scene in site.css.
+const SCENE = { scale: 1.4, top: 0.25 };
 // The sphere is laid out inside a box with the reference (tablet) proportions,
 // so wide screens don't stretch it into a flat band. Pictures are sized from that
 // box, and stop growing past PIC_BASE so they stay small on big screens.
 const SCENE_RATIO = 0.84, PIC_BASE = 1100;
-let sphereW = 0;
+let sphereW = 0, H0 = 0;
+const nodeW = [], nodeH = [];
 function sizeSphere() {
-  sphereW = Math.min(scene.clientWidth, scene.clientHeight / SCENE_RATIO);
+  H0 = scene.clientHeight / SCENE.scale;
+  sphereW = Math.min(scene.clientWidth, H0 / SCENE_RATIO);
   const base = Math.min(sphereW, PIC_BASE);
   tnEls.forEach((el, i) => { el.style.width = ((NODES[i].bw / 100) * base).toFixed(1) + 'px'; });
+  tnEls.forEach((el, i) => { nodeW[i] = el.offsetWidth; nodeH[i] = el.offsetHeight; });
 }
-const cam = { yaw: 0.35, pitch: -0.12, k: 1, vy: 0, vp: 0, tYaw: null, tPitch: null, tK: 1 };
+const cam = { yaw: 0.35, pitch: -0.12, k: 1, vy: 0, vp: 0, tYaw: null, tPitch: null, tK: 1, gap: 1 };
 let active = null, dragInfo = null, justDragged = false, dragging = false;
 
 function setActive(i, { focusNote = false } = {}) {
@@ -139,11 +145,15 @@ function threadFrame() {
   }
   c.k += (c.tK - c.k) * 0.07;
   c.pitch = Math.max(-0.9, Math.min(0.9, c.pitch));
-  const W = scene.clientWidth, H = scene.clientHeight, cx = W / 2, cy = H * 0.39;
-  const Rx = sphereW * 0.43, Ry = H * 0.34, f = 2.4;
+  const W = scene.clientWidth, H = scene.clientHeight, cx = W / 2, cy = H0 * (SCENE.top + 0.39);
+  const Rx = sphereW * 0.43, Ry = H0 * 0.34, f = 2.4;
   const cyw = Math.cos(c.yaw), syw = Math.sin(c.yaw), cp = Math.cos(c.pitch), sp = Math.sin(c.pitch);
   const girl = $('.girl', scene), gr = girl.getBoundingClientRect(), sr = scene.getBoundingClientRect();
   const hx = gr.left - sr.left + gr.width * 0.37, hy = gr.top - sr.top + gr.height * 0.01;
+  // Keep a clear column around the figure so her face and body stay visible.
+  // It opens while browsing and closes when a picture is focused (she fades then).
+  c.gap += ((active === null ? 1 : 0) - c.gap) * 0.07;
+  const gapHalf = gr.width * 0.62 * c.gap, gTop = gr.top - sr.top, gBot = gr.bottom - sr.top;
   const cv = $('.th-cv', scene), ctx = cv.width ? cv.getContext('2d') : null, dpr = cv._dpr || 1;
   if (ctx) { ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H); }
   const proj = [];
@@ -152,7 +162,20 @@ function threadFrame() {
     const x1 = n.x * cyw + n.z * syw, z1 = -n.x * syw + n.z * cyw;
     const y2 = n.y * cp - z1 * sp, z2 = n.y * sp + z1 * cp;
     const sc = f / (f + z2);
-    proj.push({ i, px: cx + x1 * sc * Rx * c.k, py: cy + y2 * sc * Ry * c.k, z: z2, sc: sc * c.k });
+    const span = sc * Rx * c.k; // furthest this picture can sit from the centre line
+    const py = cy + y2 * sc * Ry * c.k;
+    let dx = x1 * span, fade = 1;
+    const halfH = (nodeH[i] || 0) * sc * c.k / 2;
+    if (gapHalf > 1 && py + halfH > gTop && py - halfH < gBot) {
+      // squeeze the sphere outwards past the column; pictures cross it quickly (tanh)
+      const g = gapHalf + (nodeW[i] || 0) * sc * c.k / 2;
+      if (span > g) {
+        const t = Math.tanh(dx / 14);
+        dx = g * t + dx * (span - g) / span;
+        fade = Math.min(1, Math.abs(t) * 1.15) ** 2;
+      }
+    }
+    proj.push({ i, px: cx + dx, py, z: z2, sc: sc * c.k, fade });
   }
   for (const P of proj) {
     const el = tnEls[P.i];
@@ -163,14 +186,15 @@ function threadFrame() {
     const bri = active === null ? 1.1 - depth * 0.55 : (P.i === active ? 1.05 : 0.35);
     el.style.filter = `blur(${blur.toFixed(2)}px) brightness(${bri.toFixed(2)})`;
     el.style.zIndex = String(P.z < 0.05 ? 20 + Math.round((1 - depth) * 10) : 1 + Math.round((1 - depth) * 10));
+    el.style.opacity = P.fade.toFixed(3);
   }
   if (ctx) {
     for (const Q of proj) {
       const red = NODES[Q.i].kind === 'post';
       const on = active === Q.i, dim = active !== null && !on;
-      const mx = (hx + Q.px) / 2, my = Math.min(hy, Q.py) - H * 0.18 - Math.abs(Q.px - hx) * 0.12;
+      const mx = (hx + Q.px) / 2, my = Math.min(hy, Q.py) - H0 * 0.18 - Math.abs(Q.px - hx) * 0.12;
       ctx.beginPath(); ctx.moveTo(hx, hy); ctx.quadraticCurveTo(mx, my, Q.px, Q.py);
-      const al = dim ? 0.12 : (on ? 1 : 0.55 - ((Q.z + 1) / 2) * 0.25);
+      const al = (dim ? 0.12 : (on ? 1 : 0.55 - ((Q.z + 1) / 2) * 0.25)) * Q.fade;
       ctx.lineWidth = on ? 2 : 1.1;
       ctx.strokeStyle = red ? `rgba(232,74,62,${al.toFixed(3)})` : `rgba(236,240,255,${(al * 0.8).toFixed(3)})`;
       ctx.shadowColor = red ? 'rgba(255,60,50,.8)' : 'rgba(255,255,255,.7)'; ctx.shadowBlur = on ? 10 : 5;
@@ -385,6 +409,12 @@ function sizeCanvases() {
 function onResize() {
   lensIn.style.width = stage.clientWidth * 2.3 + 'px';
   lensIn.style.height = stage.clientHeight * 2.3 + 'px';
+  // magnified copy of the section's sky, lined up with the real one (lens zoom is 2.3x)
+  const sky = $('.wind-sky', wind), lensSky = $('.lens-sky', lensIn);
+  if (sky && lensSky) {
+    const k = sky.getBoundingClientRect(), t = stage.getBoundingClientRect(), Z = 2.3;
+    Object.assign(lensSky.style, { left: (k.left - t.left) * Z + 'px', top: (k.top - t.top) * Z + 'px', width: k.width * Z + 'px', height: k.height * Z + 'px' });
+  }
   sizeSphere(); sizeCanvases(); kick();
 }
 window.addEventListener('scroll', kick, { passive: true });
