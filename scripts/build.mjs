@@ -24,7 +24,6 @@ const DESIGN_ASSETS = [
   'af130bde050ed78e47d1f5023b03e171.jpg', // blank postcard
   'bff07bbafe57ad4f6d35083376076786.jpg', // wind sky
   'bec0fc64f969970283fc685e85fc3714.png', // "Notes from the wind" lettering
-  'ca8690c1eb0259c379bf191f943a1ea5.jpg', // Indiranagar street
   '1656fed37786323a800c992317f7ccd6.jpg', // ink-wash tiger
   'fc07336bde0a13387bed01353deeb533.png', // Bengaluru line drawing
 ];
@@ -45,30 +44,51 @@ async function makeGlow(src, out) {
     .joinChannel(alpha).png({ compressionLevel: 9 }).toFile(out);
 }
 
-// "Notes from the wind": the ink plum branch (images/design/plum-branch.jpg) lifted
-// off its cream paper, on a transparent canvas with the stage's proportions
-// (1472 x 952, the same coordinates as the drifting sentences). The trunk sits
-// where the sentences start, so they still stream out of the branches.
-export const BRANCH = { width: 1472, height: 952, left: 470, top: 0, paper: [237, 232, 226], ink: 18 };
+// "Notes from the wind": the plum branch (images/design/plum-branch.jpg, dark ink on
+// light paper) restyled as a bold black silhouette with flat cream blossoms, tilted so
+// it reaches in diagonally from the left. The canvas is the stage (1472 x 952, the
+// sentences' coordinate space). It is laid out on a wider canvas and cropped to the
+// stage, so the trunk enters from the stage's left edge, as in the design mockup.
+export const BRANCH = { stageW: 1472, h: 952, extra: 589, angle: 32, left: 300, top: 10, height: 933 };
 async function makeBranch(src, out) {
   const sharp = (await import('sharp')).default;
-  const h = BRANCH.height;
-  const { data, info } = await sharp(src).resize({ height: h }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-  const [pr, pg, pb] = BRANCH.paper, paperL = 0.299 * pr + 0.587 * pg + 0.114 * pb;
-  const rgba = Buffer.alloc(info.width * info.height * 4);
-  for (let i = 0, j = 0; i < data.length; i += 3, j += 4) {
-    const r = data[i], g = data[i + 1], b = data[i + 2];
-    const l = 0.299 * r + 0.587 * g + 0.114 * b;
-    // how far this pixel is from bare paper (0) towards full ink (1); faint paper grain is dropped
-    let a = (paperL - l) / (paperL - BRANCH.ink);
-    a = a < 0.03 ? 0 : Math.min(1, (a - 0.03) / 0.97);
-    // un-mix the paper so petals keep their own grey instead of a cream fringe
-    const un = (c, p) => (a > 0 ? Math.max(0, Math.min(255, Math.round((c - p * (1 - a)) / a))) : 0);
-    rgba[j] = un(r, pr); rgba[j + 1] = un(g, pg); rgba[j + 2] = un(b, pb); rgba[j + 3] = Math.round(a * 255);
+  const meta = await sharp(src).metadata();
+  const W = Math.round(meta.width * 1.5), H = Math.round(meta.height * 1.5), N = W * H;
+  const { data: L } = await sharp(src).resize(W, H, { kernel: 'lanczos3' }).greyscale().raw().toBuffer({ resolveWithObject: true });
+  // 3x3 erode/dilate on a 0/1 mask, r times
+  const morph = (m, op, r) => {
+    let a = m;
+    for (let k = 0; k < r; k++) {
+      const b = new Uint8Array(N);
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        let v = op === 'min' ? 1 : 0;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          const yy = y + dy, xx = x + dx, q = yy < 0 || yy >= H || xx < 0 || xx >= W ? 0 : a[yy * W + xx];
+          v = op === 'min' ? Math.min(v, q) : Math.max(v, q);
+        }
+        b[y * W + x] = v;
+      }
+      a = b;
+    }
+    return a;
+  };
+  // Petals are the soft grey washes; opening drops thin grey brush edges along the branches.
+  const mid = new Uint8Array(N);
+  for (let i = 0; i < N; i++) mid[i] = L[i] >= 100 && L[i] <= 222 ? 1 : 0;
+  const petals = morph(morph(mid, 'min', 3), 'max', 5);
+  const rgba = Buffer.alloc(N * 4);
+  for (let i = 0; i < N; i++) {
+    const a = Math.max(0, Math.min(1, (226 - L[i]) / 14)); // bare paper -> transparent
+    const c = petals[i] && L[i] >= 92 ? [247, 242, 232] : [26, 26, 28];
+    rgba.set([c[0], c[1], c[2], Math.round(a * 255)], i * 4);
   }
-  const cut = await sharp(rgba, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer();
-  await sharp({ create: { width: BRANCH.width, height: h, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
-    .composite([{ input: cut, left: BRANCH.left, top: BRANCH.top }]).png({ compressionLevel: 9 }).toFile(out);
+  const tilted = await sharp(rgba, { raw: { width: W, height: H, channels: 4 } })
+    .rotate(BRANCH.angle, { background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+  const trimmed = await sharp(tilted).trim().png().toBuffer();
+  const sized = await sharp(trimmed).resize({ height: BRANCH.height }).png().toBuffer();
+  await sharp({ create: { width: BRANCH.stageW + BRANCH.extra, height: BRANCH.h, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite([{ input: sized, left: BRANCH.left, top: BRANCH.top }]).png().toBuffer()
+    .then((wide) => sharp(wide).extract({ left: BRANCH.extra, top: 0, width: BRANCH.stageW, height: BRANCH.h }).png({ compressionLevel: 9 }).toFile(out));
 }
 
 export async function build({ root = ROOT, dist = DIST, log = console.log } = {}) {
@@ -103,6 +123,16 @@ export async function build({ root = ROOT, dist = DIST, log = console.log } = {}
   // The hero night field (the extended 2000 x 2000 painting): web copy, metadata stripped.
   await (await import('sharp')).default(path.join(root, 'assets', 'blue_nightscape_2000x2000.png'))
     .jpeg({ quality: 82, mozjpeg: true, progressive: true }).toFile(path.join(assetsOut, 'hero-night.jpg'));
+
+  // Footer street photo (images/design/indiranagar.jpg). Small sources are enlarged to
+  // 1472px wide with a high-quality filter and sharpened; a large source is used as-is.
+  {
+    const sharp = (await import('sharp')).default, src = path.join(root, 'images', 'design', 'indiranagar.jpg');
+    const { width } = await sharp(src).metadata();
+    let img = sharp(src).rotate().resize({ width: Math.max(width, 1472), kernel: 'lanczos3', withoutEnlargement: false });
+    if (width < 1472) img = img.sharpen({ sigma: 1.1, m1: 0.6, m2: 2.2, x1: 2, y2: 12, y3: 20 });
+    await img.jpeg({ quality: 86, mozjpeg: true, progressive: true }).toFile(path.join(assetsOut, 'indiranagar.jpg'));
+  }
 
   await makeBranch(path.join(root, 'images', 'design', 'plum-branch.jpg'), path.join(assetsOut, 'wind-branch.png'));
 

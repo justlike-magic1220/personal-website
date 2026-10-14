@@ -349,7 +349,7 @@ const WIND = [
 const wind = $('#wind'), stage = $('.stage', wind), floaters = $('.floaters', wind), bubble = $('.bubble', wind);
 const tps = $$('.tp', wind), rbg = $$('.rbg', wind);
 const branches = $$('img[src$="wind-branch.png"]', wind);
-const TRUNK_X = 625; // trunk base in the branch picture's 1472 x 952 space
+const TRUNK = [0, 760]; // where the trunk enters, in the branch picture's 1472 x 952 space
 let windOpen = null, windOpener = null;
 
 function openWind(i, opener) {
@@ -397,7 +397,7 @@ function windFrame(now) {
   });
   const sway = Math.sin(t * 0.6) * 0.5;
   // the branch and its sentences sway together, pivoting at the trunk's base
-  rbg.forEach((g) => g.setAttribute('transform', `rotate(${sway.toFixed(3)} ${TRUNK_X} 952)`));
+  rbg.forEach((g) => g.setAttribute('transform', `rotate(${sway.toFixed(3)} ${TRUNK[0]} ${TRUNK[1]})`));
   branches.forEach((b) => { b.style.transform = `rotate(${sway.toFixed(3)}deg)`; });
   return true;
 }
