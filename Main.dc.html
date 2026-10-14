@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Preeti K</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&amp;family=Instrument+Serif:ital@0;1&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;family=Libre+Caslon+Text:ital@0;1&amp;family=Caveat:wght@400;500&amp;family=Shippori+Mincho:wght@500&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#04060c}
+a{color:#eef3ff}a:hover{color:#ffffff}
+.pk{font-family:'Manrope',system-ui,sans-serif;color:#eef3ff;background:#04060c;overflow-x:clip}
+.pk *{box-sizing:border-box}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.grain{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;opacity:.12;mix-blend-mode:overlay;z-index:6}
+.grain rect{filter:url(#pkGrain)}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.07);color:inherit;font-family:'Manrope',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background .25s}
+.btn:hover{background:rgba(255,255,255,.16)}
+.btn:focus-visible,.btn:focus-within{outline:2px solid currentColor;outline-offset:2px}
+.btn.solid{background:#f1eee7;color:#111;border-color:#f1eee7}
+.btn.icon{width:44px;padding:0}
+.btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.btn input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.spacer{flex:1}
+.ta{width:100%;min-height:90px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.35);color:inherit;font-family:'Manrope',sans-serif;font-size:14px;line-height:1.5;padding:10px 12px;resize:vertical}
+.seam{position:relative;height:clamp(140px,16vw,260px);pointer-events:none;overflow:hidden}
+.fog{position:absolute;border-radius:50%;filter:blur(50px);background:#ffffff}
+
+/* ---------- 01 · hero ---------- */
+.hero{position:relative;height:2300px;background:#04060c;--p:0;--a:0;--g:0;--d:0;--mx:300;--rise:80;--dy:700;--arc:0}
+.hero-stick{position:sticky;top:0;height:100svh;min-height:600px;max-height:980px;overflow:hidden;background:#000}
+.hero-bg{position:absolute;left:0;top:0;width:100%;height:165%;object-fit:cover;object-position:50% 0%;transform:translateY(calc(var(--p) * -39%));will-change:transform}
+.hero-blur{position:absolute;left:0;right:0;bottom:0;height:62%;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);-webkit-mask-image:linear-gradient(rgba(0,0,0,0),#000 70%);mask-image:linear-gradient(rgba(0,0,0,0),#000 70%);opacity:calc(var(--d) * 1.2);pointer-events:none;z-index:4}
+.hero-shade{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55) 45%,#000 92%);opacity:calc(.3 + var(--d) * .7);pointer-events:none;z-index:4}
+.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:#000}
+.pk-nav{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:14px clamp(16px,4vw,48px);z-index:7;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.pk-nav a{color:rgba(238,243,255,.85);text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:0 6px}
+.pk-nav a:hover{color:#ffffff}
+.pk-links{display:flex;flex-wrap:wrap;gap:clamp(2px,1.6vw,22px)}
+.hero-copy{position:absolute;left:0;right:0;top:44%;display:flex;flex-direction:column;align-items:center;gap:clamp(18px,2.6vw,34px);padding:0 16px;z-index:3;transform:translateY(calc(-50% - var(--p) * 120px));opacity:calc(1 - var(--d) * 1.4)}
+.title-wrap{position:relative;width:clamp(290px,54vw,800px)}
+.title-wrap h1{margin:0}
+.title-img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 14px rgba(205,228,255,.4))}
+.star-glow{position:absolute;left:61.16%;top:44.56%;width:9%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,255,255,.95) 0,rgba(214,236,255,.55) 28%,rgba(214,236,255,0) 70%);mix-blend-mode:screen;animation:pkTw 4.2s ease-in-out infinite;pointer-events:none}
+@keyframes pkTw{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.9)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}}
+.credits{display:grid;grid-template-columns:repeat(4,minmax(0,auto));gap:10px clamp(18px,4vw,56px);margin:0;text-align:center;font-size:11px;line-height:1.45;color:rgba(235,242,255,.85)}
+.credits div{display:flex;flex-direction:column;gap:3px}
+.credits dt{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(235,242,255,.62)}
+.credits dd{margin:0;font-weight:500}
+.tg{position:absolute;top:42%;width:clamp(130px,21vw,320px);z-index:5;pointer-events:none;will-change:transform}
+.tg.l{left:2vw;aspect-ratio:406/570;transform-origin:62% 55%;transform:translate(calc((var(--a) * var(--mx) + var(--d) * var(--mx) * .25) * 1px),calc((var(--d) * var(--dy) - var(--arc) * var(--rise)) * 1px)) rotate(calc(-50deg + var(--a) * 24deg + var(--d) * 80deg))}
+.tg.r{right:2vw;aspect-ratio:402/578;transform-origin:38% 55%;transform:translate(calc((var(--a) * var(--mx) + var(--d) * var(--mx) * .25) * -1px),calc((var(--d) * var(--dy) - var(--arc) * var(--rise)) * 1px)) rotate(calc(50deg - var(--a) * 24deg - var(--d) * 80deg))}
+.tg-in{position:absolute;left:0;top:0;width:100%;height:100%;animation:pkBob 5s ease-in-out infinite}
+.tg.r .tg-in{animation-delay:-2.5s}
+@keyframes pkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.tg img{position:absolute;left:0;top:0;width:100%;height:100%;opacity:calc(1 - var(--g));filter:drop-shadow(0 8px 26px rgba(120,170,255,.3))}
+.tg canvas{position:absolute;left:-30%;top:-30%;width:160%;height:160%}
+.cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(235,242,255,.8);z-index:5;opacity:calc(1 - var(--p) * 6)}
+.cue i{display:block;width:1px;height:40px;background:linear-gradient(#ffffff,rgba(255,255,255,0));transform-origin:top;animation:pkCue 2.2s ease-in-out infinite}
+@keyframes pkCue{0%{transform:scaleY(0);opacity:1}55%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+
+/* ---------- 02 · thread theory ---------- */
+.th{position:relative;background:#000;padding:0}
+.scene{position:relative;width:100%;height:clamp(760px,84vw,1240px);overflow:hidden;background:#000;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.scene.drag{cursor:grabbing}
+.scene-vig{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;box-shadow:inset 0 0 140px 40px #000;z-index:30}
+.th-cv{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.girl{position:absolute;z-index:15;left:50%;top:8%;height:60%;aspect-ratio:744/2664;transform:translateX(-50%);pointer-events:none;transition:opacity .8s}
+.girl img{width:100%;height:100%;display:block;filter:brightness(.68) contrast(1.04) saturate(.9) drop-shadow(0 0 22px rgba(120,140,200,.12))}
+.ft-tiger{position:absolute;right:0;bottom:0;width:clamp(260px,34vw,560px);height:auto;display:block;pointer-events:none;opacity:1;filter:grayscale(1) contrast(.6) brightness(.97) sepia(.14);-webkit-mask-image:radial-gradient(ellipse 70% 72% at 62% 64%,#000 38%,rgba(0,0,0,.6) 60%,rgba(0,0,0,0) 82%);mask-image:radial-gradient(ellipse 70% 72% at 62% 64%,#000 38%,rgba(0,0,0,.6) 60%,rgba(0,0,0,0) 82%)}
+.scene.focus .girl{opacity:.12}
+.tn{position:absolute;left:0;top:0;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 50%;will-change:transform,filter}
+.tn img{display:block;width:100%;height:auto;pointer-events:none}
+.tn.tile img{mix-blend-mode:screen;filter:brightness(1.12)}
+.tn.post img{box-shadow:0 0 22px rgba(255,255,255,.22),0 0 2px rgba(255,255,255,.6)}
+.tn:focus-visible{outline:2px solid #ffffff;outline-offset:4px}
+.tn.act img{box-shadow:0 0 0 1px #ffffff,0 0 40px rgba(255,90,80,.5)}
+.th-title{position:absolute;left:0;right:0;bottom:3%;margin:0;text-align:center;font-family:'Ballet',cursive;font-optical-sizing:auto;font-weight:400;font-size:clamp(54px,7.4vw,124px);line-height:1.05;color:#f4f2ee;text-shadow:0 2px 26px rgba(0,0,0,.85);pointer-events:none;z-index:25;transition:opacity .8s}
+.th-title span{display:block}
+.scene.focus .th-title{opacity:.08}
+.th-note{position:absolute;right:clamp(12px,2.4vw,32px);bottom:clamp(12px,2.4vw,32px);width:min(420px,calc(100% - 24px));z-index:40;padding:18px 20px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(10,12,18,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:pkRise .7s .5s both cubic-bezier(.2,.8,.2,1);cursor:auto}
+@keyframes pkRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.th-note .meta{display:flex;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.th-note h3{margin:6px 0;font-family:'Instrument Serif',serif;font-weight:400;font-size:28px;line-height:1.05}
+.th-note p{margin:0;font-size:14px;line-height:1.55;color:rgba(240,243,250,.88)}
+
+/* ---------- 03 · postcards ---------- */
+.pc-sec{position:relative;background:#a5b3c8;color:#14213a;padding:0 0 clamp(40px,5vw,72px);overflow:hidden}
+.pc-head{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px 24px;padding:clamp(8px,2vw,28px) clamp(16px,3vw,44px) 0}
+.pc-head img{display:block;width:clamp(280px,46vw,640px);height:auto}
+.pc-ctrl{display:flex;gap:10px}
+.pc-sec .btn{border-color:rgba(13,20,38,.32);color:#0d1426;background:rgba(255,255,255,.28)}
+.pc-sec .btn:hover{background:rgba(255,255,255,.5)}
+.pc-track{position:relative;z-index:3;display:flex;align-items:center;gap:clamp(16px,2.4vw,36px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;padding:30px clamp(16px,4vw,56px) 24px;scrollbar-width:thin;scrollbar-color:rgba(13,20,38,.35) transparent}
+.pc,.pc-add{flex:0 0 auto;width:min(380px,80vw);scroll-snap-align:center}
+.pc{position:relative;aspect-ratio:736/889;container-type:inline-size;-webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,0),#000 9%,#000 91%,rgba(0,0,0,0)),linear-gradient(180deg,rgba(0,0,0,0),#000 6%,#000 94%,rgba(0,0,0,0));-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,rgba(0,0,0,0),#000 9%,#000 91%,rgba(0,0,0,0)),linear-gradient(180deg,rgba(0,0,0,0),#000 6%,#000 94%,rgba(0,0,0,0));mask-composite:intersect;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.pc:hover{transform:translateY(-6px)}
+.pc > img{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.pc-photo{position:absolute;left:14.7%;top:9.9%;width:71.6%;height:36.2%;object-fit:cover;filter:sepia(.18) contrast(.96) saturate(.92)}
+.pc-date{position:absolute;left:63%;top:41.6%;font-family:'IBM Plex Mono',monospace;font-size:3.1cqw;letter-spacing:.06em;color:#ff9a3c;text-shadow:0 0 6px rgba(255,140,40,.65)}
+.pc-msgwrap{position:absolute;left:15.2%;top:54%;width:34.8%;height:33.6%}
+.pc-msg{position:absolute;left:50%;top:50%;width:40.6cqw;height:34.8cqw;transform:translate(-50%,-50%) rotate(-90deg);margin:0;font-family:'Caveat',cursive;font-size:4.1cqw;line-height:1.3;color:#24395f;overflow:hidden;overflow-wrap:anywhere}
+.pc-to{position:absolute;left:52.3%;top:63%;width:34%;margin:0;font-family:'Caveat',cursive;font-size:4.1cqw;line-height:1.5;color:#24395f}
+.pc-to span{display:block}
+.pc-to .from{color:#7a2f22}
+.pc-add{min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;border:1.5px dashed rgba(13,20,38,.45);border-radius:6px;background:rgba(255,255,255,.18);color:#0d1426;font:inherit;cursor:pointer;transition:background .3s,transform .3s}
+.pc-add:hover{background:rgba(255,255,255,.34);transform:translateY(-4px)}
+.pc-add .plus{width:62px;height:62px;border-radius:50%;border:1px solid rgba(13,20,38,.45);display:flex;align-items:center;justify-content:center}
+.pc-add .plus svg{width:22px;height:22px;fill:none;stroke:#0d1426;stroke-width:1.4;stroke-linecap:round}
+.pc-add strong{font-family:'Ballet',cursive;font-optical-sizing:auto;font-weight:400;font-size:46px;line-height:1.1;padding:0 12px;text-align:center}
+.pc-add span{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.modal-bg{position:fixed;left:0;top:0;width:100%;height:100%;z-index:80;padding:0;border:0;background:rgba(8,12,22,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);cursor:pointer}
+.modal{position:fixed;left:50%;top:50%;z-index:81;width:min(440px,calc(100% - 32px));max-height:calc(100% - 32px);overflow:auto;padding:22px 22px 20px;border-radius:8px;background:#efe6d3;color:#1c2a44;box-shadow:0 30px 80px rgba(0,0,0,.4);transform:translate(-50%,-50%);animation:pkPop .45s cubic-bezier(.2,.9,.2,1)}
+@keyframes pkPop{from{opacity:0;transform:translate(-50%,-46%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.modal h3{margin:0 0 4px;font-family:'Caveat',cursive;font-weight:500;font-size:36px;line-height:1.1}
+.modal .lede{margin:0;font-size:13px;line-height:1.5;color:rgba(28,42,68,.8)}
+.field{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.flabel{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(28,42,68,.8)}
+.inp{min-height:44px;padding:10px 12px;border-radius:6px;border:1px solid rgba(28,42,68,.3);background:#fbf7ee;color:#1c2a44;font-family:'Manrope',sans-serif;font-size:15px}
+textarea.inp{min-height:110px;resize:vertical;font-family:'Caveat',cursive;font-size:21px;line-height:1.2}
+.drop{position:relative;display:flex;align-items:center;gap:12px;min-height:70px;padding:10px 12px;border:1.5px dashed rgba(28,42,68,.38);border-radius:6px;background:#fbf7ee;cursor:pointer;font-size:13px}
+.drop:focus-within{outline:2px solid #1c2a44;outline-offset:2px}
+.drop img{width:64px;height:48px;object-fit:cover;border-radius:3px}
+.drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.drop svg{width:22px;height:22px;fill:none;stroke:#1c2a44;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.count{font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:right;opacity:.7}
+.modal .btn{border-color:rgba(28,42,68,.3);color:#1c2a44;background:rgba(255,255,255,.4)}
+.modal .btn.solid{background:#1c2a44;color:#efe6d3;border-color:#1c2a44}
+
+/* ---------- 04 · notes from the wind ---------- */
+.wind-sky{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 9%,#000 91%,rgba(0,0,0,0) 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 9%,#000 91%,rgba(0,0,0,0) 100%)}
+.wind-head{z-index:3}
+.wind{position:relative;background:linear-gradient(180deg,#c4d9e0 0%,#c1d6df 30%,#b0cade 70%,#a0bfd8 100%);color:#14202e;padding:0 0 clamp(40px,5vw,72px);overflow:hidden}
+.wind-head{position:relative;z-index:3;padding:clamp(8px,2vw,28px) clamp(12px,2vw,28px) 0}
+.wind-head img{display:block;width:clamp(280px,48vw,660px);height:auto}
+.wind-body{position:relative;z-index:2;display:block;margin-top:clamp(0px,1vw,16px)}
+.wind-body .stage{margin:0 auto;width:100%;max-width:1180px}
+.wind-body .aside{position:absolute;left:0;top:0;width:100%;height:100%;min-height:0;padding:0;display:block;pointer-events:none;z-index:6}
+.wind-body .aside .bubble{position:absolute;right:4%;top:50%;width:min(370px,80vw);margin-top:calc(min(370px,80vw) / -2);pointer-events:auto}
+.wind-body .floaters{pointer-events:none}
+.wind-body .fb{pointer-events:auto;animation-name:pkDrift2;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.95) 0,rgba(255,255,255,.35) 18%,rgba(255,255,255,.06) 46%,rgba(255,255,255,0) 60%),conic-gradient(from 200deg,rgba(255,170,220,.55),rgba(170,210,255,.55),rgba(190,255,230,.5),rgba(255,236,170,.5),rgba(255,170,220,.55));-webkit-mask-image:radial-gradient(circle,rgba(0,0,0,.18) 55%,#000 72%,#000 100%);mask-image:radial-gradient(circle,rgba(0,0,0,.18) 55%,#000 72%,#000 100%);box-shadow:none;opacity:.9}
+.wind-body .fb::after{display:none}
+.wind-body .fb:hover{opacity:1;transform:scale(1.18)}
+@keyframes pkDrift2{0%{translate:0 0}50%{translate:4px -9px}100%{translate:-3px -16px}}
+@media (max-width:700px){.wind-body .aside .bubble{right:auto;left:50%;margin-left:calc(min(370px,80vw) / -2)}}
+.stage{position:relative;flex:999 1 560px;min-width:0;max-width:940px;aspect-ratio:736/476;overflow:hidden;cursor:none;touch-action:pan-y}
+.stage > img{-webkit-mask-image:radial-gradient(ellipse 58% 62% at 40% 58%,#000 22%,rgba(0,0,0,.7) 42%,rgba(0,0,0,.3) 64%,rgba(0,0,0,0) 88%);mask-image:radial-gradient(ellipse 58% 62% at 40% 58%,#000 22%,rgba(0,0,0,.7) 42%,rgba(0,0,0,.3) 64%,rgba(0,0,0,0) 88%)}
+.stage > .rb-svg{-webkit-mask-image:linear-gradient(90deg,#000 80%,rgba(0,0,0,0) 99%);mask-image:linear-gradient(90deg,#000 80%,rgba(0,0,0,0) 99%)}
+.lens{-webkit-mask-image:none;mask-image:none}
+.stage > img{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.stage svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
+.rb{font-family:'Libre Caslon Text',serif;letter-spacing:1.6px;word-spacing:6px}
+.rb.dk{font-size:21px;fill:#151515}
+.rb.lt{font-size:18px;fill:#3f4954;opacity:.6}
+.rb-hit{fill:none;stroke:rgba(0,0,0,0);stroke-width:30;pointer-events:stroke;cursor:none}
+.lens{position:absolute;left:0;top:0;width:170px;height:170px;border-radius:50%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .35s;z-index:5;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.75),inset 0 0 22px rgba(255,255,255,.55),inset 10px -14px 30px rgba(140,190,255,.35),inset -14px 12px 30px rgba(255,170,225,.35),0 14px 40px rgba(30,60,90,.25)}
+.stage.hov .lens{opacity:1}
+.lens-in{position:absolute;left:0;top:0;transform-origin:0 0}
+.lens-in > img{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.lens-shine{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 24%,rgba(255,255,255,.75) 0,rgba(255,255,255,.12) 18%,rgba(255,255,255,0) 40%),radial-gradient(circle at 50% 50%,rgba(255,255,255,0) 62%,rgba(190,220,255,.25) 82%,rgba(255,200,240,.35) 96%);pointer-events:none}
+.aside{position:relative;flex:1 1 320px;min-width:0;min-height:460px;display:flex;align-items:center;justify-content:center;padding:16px}
+.floaters{position:absolute;left:0;top:0;width:100%;height:100%}
+.fb{position:absolute;padding:0;border:0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.95) 0,rgba(255,255,255,.4) 14%,rgba(255,255,255,.1) 38%,rgba(190,220,255,.18) 66%,rgba(255,190,236,.32) 88%,rgba(255,255,255,.6) 100%);box-shadow:inset 0 0 18px rgba(255,255,255,.5),inset 8px -12px 26px rgba(150,190,255,.3),inset -10px 10px 26px rgba(255,170,220,.28),0 14px 34px rgba(40,70,110,.16);animation:pkFloatB var(--dur) ease-in-out infinite alternate;animation-delay:var(--del);transition:transform .35s}
+.fb::after{content:'';position:absolute;left:20%;top:13%;width:24%;height:13%;border-radius:50%;background:rgba(255,255,255,.85);filter:blur(2px);transform:rotate(-28deg)}
+.fb:hover{transform:scale(1.08)}
+.fb:focus-visible{outline:2px solid #0f1726;outline-offset:4px}
+@keyframes pkFloatB{0%{translate:0 0}50%{translate:10px -16px}100%{translate:-8px -30px}}
+.aside-hint{max-width:300px;text-align:center;font-family:'Libre Caslon Text',serif;font-style:italic;font-size:16px;line-height:1.55;color:#33475e}
+.bubble{position:relative;width:min(400px,86vw);aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:13%;color:#0f1726;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.95) 0,rgba(255,255,255,.55) 16%,rgba(255,255,255,.22) 42%,rgba(196,224,255,.26) 68%,rgba(255,196,236,.34) 88%,rgba(255,255,255,.62) 100%);box-shadow:inset 0 0 40px rgba(255,255,255,.55),inset 12px -18px 50px rgba(150,190,255,.35),inset -16px 14px 50px rgba(255,170,220,.3),0 30px 80px rgba(40,70,110,.22);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:pkBubble 1s cubic-bezier(.18,.9,.22,1.05) both}
+@keyframes pkBubble{from{transform:translateX(-45%) scale(.08);opacity:.2}to{transform:translateX(0) scale(1);opacity:1}}
+.bubble::after{content:'';position:absolute;left:18%;top:12%;width:22%;height:12%;border-radius:50%;background:rgba(255,255,255,.85);filter:blur(4px);transform:rotate(-28deg);pointer-events:none}
+.bubble .kick{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.62}
+.bubble .jp{margin:8px 0 2px;font-family:'Shippori Mincho',serif;font-size:clamp(26px,3vw,34px);line-height:1.15}
+.bubble .ro{margin:0 0 8px;font-family:'Libre Caslon Text',serif;font-style:italic;font-size:13px;opacity:.75}
+.bubble .en{margin:0;font-family:'Libre Caslon Text',serif;font-size:clamp(15px,1.5vw,18px);line-height:1.4}
+.bubble .mine{margin:10px 0 0;font-size:13px;line-height:1.5;color:#2c3c52}
+.bubble .ta{min-height:72px;background:rgba(255,255,255,.55);color:#0f1726;border-color:rgba(15,23,38,.25)}
+.bubble .btn{border-color:rgba(15,23,38,.28);color:#0f1726;background:rgba(255,255,255,.42)}
+.bubble .row{justify-content:center}
+.chips{position:relative;z-index:3;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:18px 16px 0}
+.chip{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(15,23,38,.25);background:rgba(255,255,255,.38);color:#0f1726;font-family:'Libre Caslon Text',serif;font-size:14px;font-style:italic;cursor:pointer}
+.chip:hover{background:rgba(255,255,255,.65)}
+.chip:focus-visible{outline:2px solid #0f1726;outline-offset:2px}
+.wdot{position:absolute;z-index:4;width:44px;height:44px;margin:-22px 0 0 -22px;padding:0;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.wdot i{position:relative;display:block;width:15px;height:15px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.95) 0,rgba(255,255,255,.35) 32%,rgba(170,205,255,.25) 64%,rgba(255,190,235,.45) 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.85),0 2px 8px rgba(30,60,90,.25);transition:transform .3s}
+.wdot i::after{content:'';position:absolute;left:-6px;top:-6px;width:27px;height:27px;border-radius:50%;border:1px solid rgba(255,255,255,.7);animation:pkPulse 2.8s ease-out infinite}
+@keyframes pkPulse{0%{transform:scale(.55);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+.wdot:hover i,.wdot.on i{transform:scale(1.35)}
+.wdot:focus-visible{outline:2px solid #0f1726;outline-offset:-6px;border-radius:50%}
+.aside:empty{display:none}
+
+/* ---------- 05 · made with love ---------- */
+.ft{position:relative;height:clamp(640px,68vw,1040px);background:#9d9b96;overflow:hidden}
+.ft-bg{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;object-position:50% 55%;display:block}
+.ft-haze{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;background:linear-gradient(180deg,#b9c3c3 0%,rgba(172,170,164,.7) 14%,rgba(168,166,160,.42) 34%,rgba(150,148,143,.34) 70%,rgba(60,58,55,.35) 100%)}
+.ft-art{position:absolute;left:14%;top:4%;width:72%;aspect-ratio:871/635}
+.ft-art > img{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.blr{position:absolute;left:6%;top:56%;width:88%;height:auto;overflow:visible}
+.blr .ln{fill:none;stroke:#ffffff;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
+.blr .fine{stroke-width:.7;opacity:.9}
+.blr .ds{stroke-dasharray:2.5 3.5;stroke-width:.8}
+.blr .wf{fill:#ffffff}
+.ft-made{position:absolute;left:0;right:0;bottom:8%;margin:0;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.25vw,18px);letter-spacing:.32em;text-transform:lowercase;color:#ffffff;text-shadow:0 1px 12px rgba(0,0,0,.45)}
+.ft-bar{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:12px clamp(16px,4vw,48px);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(255,255,255,.9);background:linear-gradient(rgba(20,20,20,0),rgba(20,20,20,.45))}
+
+@media (max-width:700px){
+  .hero{height:1900px}
+  .credits{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tg{width:34vw}
+  .pk-links a.hide-s{display:none}
+  .scene{height:120vw;min-height:520px}
+  .girl{height:52%;top:8%}
+  .ft-art{left:4%;width:92%;top:8%}
+}
+@media (prefers-reduced-motion: reduce){
+  .tg-in,.star-glow,.cue i,.wdot i::after{animation:none}
+}
+</style>
+</helmet>
+
+<div class="pk">
+<svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="pkGrain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"></feTurbulence>
+      <feColorMatrix type="saturate" values="0"></feColorMatrix>
+    </filter>
+    <path id="star4" d="M 0 -9 Q 0 0 9 0 Q 0 0 0 9 Q 0 0 -9 0 Q 0 0 0 -9 Z"></path>
+  </defs>
+</svg>
+
+<!-- ============ 01 · PREETI K ============ -->
+<section class="hero" aria-label="Preeti K">
+  <div class="hero-stick">
+    <img class="hero-bg" src="./assets/f05492ec891399551d0d42fc240f9050.jpg" alt="">
+    <svg class="grain" aria-hidden="true"><rect width="100%" height="100%"></rect></svg>
+    <nav class="pk-nav" aria-label="Sections">
+      <span></span>
+      <div class="pk-links">
+        <a href="#threads">Threads</a>
+        <a href="#postcards">Postcards</a>
+        <a href="#wind" class="hide-s">Notes</a>
+      </div>
+    </nav>
+    <div class="hero-copy">
+      <div class="title-wrap">
+        <h1><img class="title-img" src="./assets/8dfd1009f928f38a1da1c44d98d911f0.png" alt="Preeti K"></h1>
+        <span class="star-glow" aria-hidden="true"></span>
+      </div>
+      <dl class="credits">
+        <div><dt>Built by</dt><dd>Preeti K</dd></div>
+        <div><dt>Based in</dt><dd>Bengaluru</dd></div>
+        <div><dt>By day</dt><dd>Systems Development Engineer II</dd></div>
+        <div><dt>Next chapter</dt><dd>Product</dd></div>
+      </dl>
+    </div>
+    <div class="tg l" aria-hidden="true"><div class="tg-in">
+      <img src="./assets/4c8ac84f9eb2c9da7b1628f5982e474f.png" alt="">
+      <canvas class="tg-cv-l"></canvas>
+    </div></div>
+    <div class="tg r" aria-hidden="true"><div class="tg-in">
+      <img src="./assets/c5f0d00dfc921d646234c29ada3bc6f1.png" alt="">
+      <canvas class="tg-cv-r"></canvas>
+    </div></div>
+    <div class="hero-blur"></div>
+    <div class="hero-shade"></div>
+    <div class="cue" aria-hidden="true"><span>Scroll</span><i></i></div>
+  </div>
+</section>
+
+<!-- ============ 02 · THREAD THEORY ============ -->
+<section class="th" id="threads" aria-label="Thread Theory: an index of mind">
+  <div class="scene {{ sceneCls }}" onPointerDown="{{ thDown }}" onPointerMove="{{ thMove }}" onPointerUp="{{ thUp }}" onPointerCancel="{{ thUp }}">
+    <canvas class="th-cv"></canvas>
+    <div class="girl" aria-hidden="true"><img src="./assets/748f5cf069b44bed6f92f75589938cee.png" alt=""></div>
+    <sc-for list="{{ nodes }}" as="n" hint-placeholder-count="41">
+      <button type="button" class="tn {{ n.cls }}" style="width: {{ n.bw }}%" onClick="{{ n.open }}" aria-label="{{ n.aria }}">
+        <img src="{{ n.src }}" alt="">
+      </button>
+    </sc-for>
+    <h2 class="th-title"><span>Thread Theory:</span><span>an index of mind</span></h2>
+    <div class="scene-vig"></div>
+    <sc-if value="{{ hasActive }}" hint-placeholder-val="{{ false }}">
+      <div class="th-note" role="dialog" aria-label="{{ act.label }}" onPointerDown="{{ stop }}">
+        <div class="meta"><span>Thread {{ act.idx }}</span><span>{{ act.kind }}</span></div>
+        <h3>{{ act.label }}</h3>
+        <sc-if value="{{ editTOn }}" hint-placeholder-val="{{ false }}">
+          <label class="sr" for="tnote">Note for this thread</label>
+          <textarea id="tnote" class="ta" value="{{ tDraft }}" onChange="{{ onTDraft }}"></textarea>
+          <div class="row">
+            <button type="button" class="btn solid" onClick="{{ saveT }}">Save note</button>
+            <button type="button" class="btn" onClick="{{ cancelT }}">Cancel</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notEditT }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ act.hasNote }}" hint-placeholder-val="{{ false }}"><p>{{ act.note }}</p></sc-if>
+          <div class="row">
+            <sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}">
+              <button type="button" class="btn" onClick="{{ editTOpen }}">Edit note</button>
+              <label class="btn">{{ act.imgLabel }}<input type="file" accept="image/*" onChange="{{ uploadT }}"></label>
+            </sc-if>
+            <span class="spacer"></span>
+            <button type="button" class="btn icon" onClick="{{ prevT }}" aria-label="Previous thread"><svg viewBox="0 0 16 16"><path d="M 10 3 L 5 8 L 10 13"></path></svg></button>
+            <button type="button" class="btn icon" onClick="{{ nextT }}" aria-label="Next thread"><svg viewBox="0 0 16 16"><path d="M 6 3 L 11 8 L 6 13"></path></svg></button>
+            <button type="button" class="btn icon" onClick="{{ closeT }}" aria-label="Close thread"><svg viewBox="0 0 16 16"><path d="M 4 4 L 12 12 M 12 4 L 4 12"></path></svg></button>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<div class="seam" aria-hidden="true" style="height: clamp(380px, 40vw, 600px); background: linear-gradient(180deg, #000000 0%, #020305 10%, #080a0f 20%, #121620 30%, #1f2533 40%, #303949 50%, #45505f 60%, #5e6a7d 70%, #788599 80%, #919fb4 90%, #a5b3c8 100%)">
+</div>
+
+<!-- ============ 03 · LEAVE A POSTCARD ============ -->
+<section class="pc-sec" id="postcards" aria-label="Leave a postcard">
+  <div class="pc-head">
+    <div>
+      <h2 class="sr">Leave a postcard</h2>
+      <img src="./assets/81fb8f164f8e1380a5b5976abd4155bc.png" alt="">
+    </div>
+    <div class="pc-ctrl">
+      <button type="button" class="btn icon" onClick="{{ scrollL }}" aria-label="Scroll postcards left"><svg viewBox="0 0 16 16"><path d="M 10 3 L 5 8 L 10 13"></path></svg></button>
+      <button type="button" class="btn icon" onClick="{{ scrollR }}" aria-label="Scroll postcards right"><svg viewBox="0 0 16 16"><path d="M 6 3 L 11 8 L 6 13"></path></svg></button>
+    </div>
+  </div>
+  <div class="pc-track" role="list">
+    <sc-for list="{{ posts }}" as="p" hint-placeholder-count="0">
+      <article class="pc" role="listitem" aria-label="Postcard from {{ p.from }}">
+        <img src="./assets/af130bde050ed78e47d1f5023b03e171.jpg" alt="">
+        <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><img class="pc-photo" src="{{ p.img }}" alt="Photo from {{ p.from }}"></sc-if>
+        <span class="pc-date">{{ p.stamp }}</span>
+        <div class="pc-msgwrap"><p class="pc-msg">{{ p.note }}</p></div>
+        <p class="pc-to"><span>to Preeti K,</span><span>somewhere on the internet</span><span class="from">— {{ p.from }}</span></p>
+      </article>
+    </sc-for>
+    <article class="pc" role="listitem" aria-label="The first postcard">
+      <img src="./assets/081c2c7056cfbd54f86114e234d623da.jpg" alt="A postcard: a figure by a window with glass bowls; on the back, a handwritten note to a random friend.">
+    </article>
+    <article class="pc" role="listitem" aria-label="The first postcard, again">
+      <img src="./assets/081c2c7056cfbd54f86114e234d623da.jpg" alt="">
+    </article>
+    <article class="pc" role="listitem" aria-label="The first postcard, once more">
+      <img src="./assets/081c2c7056cfbd54f86114e234d623da.jpg" alt="">
+    </article>
+    <button type="button" class="pc-add" onClick="{{ openModal }}">
+      <span class="plus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M 12 4 V 20 M 4 12 H 20"></path></svg></span>
+      <strong>Add your postcard</strong>
+      <span>Photo · your name · a note</span>
+    </button>
+  </div>
+
+  <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+    <button type="button" class="modal-bg" onClick="{{ closeModal }}" aria-label="Close"></button>
+    <form class="modal" role="dialog" aria-label="Add your postcard" onSubmit="{{ submitCard }}">
+      <h3>Write a postcard</h3>
+      <p class="lede">It joins the row, stamped with today's date.</p>
+      <div class="field">
+        <span class="flabel">Photo</span>
+        <label class="drop">
+          <sc-if value="{{ dHasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ dImg }}" alt="Selected photo"></sc-if>
+          <sc-if value="{{ dNoImg }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M 4 17 L 10 12 L 14 15 L 17 13 L 20 16"></path></svg></sc-if>
+          <span>{{ dImgLabel }}</span>
+          <input type="file" accept="image/*" onChange="{{ onDImg }}">
+        </label>
+      </div>
+      <div class="field">
+        <label class="flabel" for="pcfrom">From</label>
+        <input id="pcfrom" class="inp" type="text" value="{{ dFrom }}" onChange="{{ onFrom }}" placeholder="Your name">
+      </div>
+      <div class="field">
+        <label class="flabel" for="pcnote">Note</label>
+        <textarea id="pcnote" class="inp" value="{{ dNote }}" onChange="{{ onNote }}" placeholder="Say something kind…"></textarea>
+        <span class="count">{{ noteCount }}</span>
+      </div>
+      <div class="row">
+        <button type="submit" class="btn solid" disabled="{{ cantSend }}">Send postcard</button>
+        <button type="button" class="btn" onClick="{{ closeModal }}">Cancel</button>
+      </div>
+    </form>
+  </sc-if>
+</section>
+
+<div class="seam" aria-hidden="true" style="height: clamp(280px, 28vw, 440px); background: linear-gradient(180deg, #a5b3c8 0%, #a8b7cb 15%, #adbdd0 30%, #b3c4d5 45%, #b9cbd9 60%, #bed2dc 75%, #c2d7df 90%, #c4d9e0 100%)">
+</div>
+
+<!-- ============ 04 · NOTES FROM THE WIND ============ -->
+<section class="wind" id="wind" aria-label="Notes from the wind" onClick="{{ wAway }}">
+  <img class="wind-sky" src="./assets/bff07bbafe57ad4f6d35083376076786.jpg" alt="">
+  <div class="wind-head">
+    <h2 class="sr">Notes from the wind</h2>
+    <img src="./assets/bec0fc64f969970283fc685e85fc3714.png" alt="">
+  </div>
+  <div class="wind-body">
+    <div class="stage {{ stageCls }}" onPointerMove="{{ wMove }}" onPointerEnter="{{ wEnter }}" onPointerLeave="{{ wLeave }}" onPointerDown="{{ wMove }}">
+      <img src="./assets/3047f4e46c6508b5986bf1f4c5a373a1.jpg" alt="A dark tree reaching into a pale sky; sentences stream from its branches like wind.">
+      <svg class="rb-svg" viewBox="0 0 1472 952" aria-hidden="true">
+        <defs>
+          <path id="rb1" d="M 590 320 C 600 240 640 190 700 170 C 820 155 980 185 1150 208 C 1250 222 1350 230 1472 236"></path>
+          <path id="rb2" d="M 690 195 C 740 225 790 262 840 292 C 880 316 905 326 930 334"></path>
+          <path id="rb3" d="M 555 300 C 600 335 640 360 700 352 C 830 342 1050 350 1260 345 C 1340 343 1420 342 1472 342"></path>
+          <path id="rb4" d="M 560 390 C 620 370 680 370 760 390 C 860 415 1000 415 1300 410 C 1380 409 1440 408 1472 408"></path>
+          <path id="rb5" d="M 545 400 C 600 440 680 470 780 485 C 900 495 1000 490 1080 480"></path>
+          <path id="rb6" d="M 470 460 C 530 510 650 530 800 535 C 1000 538 1200 510 1472 496"></path>
+          <path id="rb7" d="M 560 430 C 640 510 760 545 900 555 C 1100 565 1300 550 1472 543"></path>
+          <path id="rb8" d="M 205 480 C 280 550 420 590 600 590 C 800 590 1050 585 1360 580 C 1400 579 1440 579 1472 579"></path>
+          <path id="rb9" d="M 110 495 C 170 550 300 590 470 610 C 700 635 1000 620 1300 590 C 1360 584 1420 580 1472 578"></path>
+          <path id="rb10" d="M 120 575 C 210 630 380 660 580 665 C 800 670 1000 660 1200 650"></path>
+          <path id="rb11" d="M 110 590 C 160 640 250 680 420 700 C 640 725 950 715 1260 695 C 1340 690 1410 686 1472 684"></path>
+          <path id="rb12" d="M 215 665 C 320 705 470 735 680 735 C 880 735 1020 728 1120 725"></path>
+          <path id="rl1" d="M 590 320 C 560 250 470 240 420 280 C 380 320 400 390 460 410"></path>
+          <path id="rl2" d="M 520 410 C 470 320 380 260 320 275 C 260 290 250 350 290 390"></path>
+          <path id="rl3" d="M 450 420 C 380 320 260 310 180 330 C 100 350 70 410 100 470"></path>
+          <path id="rl4" d="M 440 460 C 380 420 280 410 220 440 C 160 470 160 510 210 515"></path>
+          <path id="rl5" d="M 420 510 C 360 460 250 460 180 490 C 120 515 110 560 150 590"></path>
+        </defs>
+        <g class="rbg">
+          <text class="rb lt"><textPath class="tp" href="#rl1">Fall seven times, stand up eight. Fall seven times, stand up eight. Fall seven times, stand up eight.</textPath></text>
+          <text class="rb lt"><textPath class="tp" href="#rl2">One time, one meeting. One time, one meeting. One time, one meeting. One time, one meeting.</textPath></text>
+          <text class="rb lt"><textPath class="tp" href="#rl3">Even dust, piled up, becomes a mountain. Even dust, piled up, becomes a mountain. Even dust, piled up.</textPath></text>
+          <text class="rb lt"><textPath class="tp" href="#rl4">Even monkeys fall from trees. Even monkeys fall from trees. Even monkeys fall from trees.</textPath></text>
+          <text class="rb lt"><textPath class="tp" href="#rl5">If you wait, the weather turns fair. If you wait, the weather turns fair. If you wait.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb1">Fall seven times, stand up eight.   Fall seven times, stand up eight.   Fall seven times, stand up eight.   Fall seven times, stand up eight.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb2">After the rain, the earth hardens. After the rain, the earth hardens.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb3">One time, one meeting.   One time, one meeting.   One time, one meeting.   One time, one meeting.   One time, one meeting.   One time, one meeting.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb4">this moment will not come again,   one time, one meeting.   this moment will not come again,   one time, one meeting.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb5">After the rain, the earth hardens.   After the rain, the earth hardens.   After the rain.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb6">After the rain, the earth hardens.   After the rain, the earth hardens.   After the rain, the earth hardens.   After the rain, the earth hardens.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb7">Even dust, piled up, becomes a mountain.   Even dust, piled up, becomes a mountain.   Even dust, piled up, becomes a mountain.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb8">Even dust, piled up, becomes a mountain.   Even dust, piled up, becomes a mountain.   Even dust, piled up, becomes a mountain.   Even dust.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb9">Even monkeys fall from trees.   Even monkeys fall from trees.   Even monkeys fall from trees.   Even monkeys fall from trees.   Even monkeys fall.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb10">Even monkeys fall from trees.   Even monkeys fall from trees.   Even monkeys fall from trees.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb11">If you wait, the weather turns fair for the voyage.   If you wait, the weather turns fair for the voyage.   If you wait.</textPath></text>
+          <text class="rb dk"><textPath class="tp" href="#rb12">If you wait, the weather turns fair.   If you wait, the weather turns fair.   If you wait.</textPath></text>
+        </g>
+        <g>
+          <path class="rb-hit" d="M 590 320 C 600 240 640 190 700 170 C 820 155 980 185 1150 208" onClick="{{ openW0 }}"></path>
+          <path class="rb-hit" d="M 590 320 C 560 250 470 240 420 280 C 380 320 400 390 460 410" onClick="{{ openW0 }}"></path>
+          <path class="rb-hit" d="M 555 300 C 600 335 640 360 700 352 C 830 342 1050 350 1260 345" onClick="{{ openW1 }}"></path>
+          <path class="rb-hit" d="M 560 390 C 620 370 680 370 760 390 C 860 415 1000 415 1300 410" onClick="{{ openW1 }}"></path>
+          <path class="rb-hit" d="M 520 410 C 470 320 380 260 320 275 C 260 290 250 350 290 390" onClick="{{ openW1 }}"></path>
+          <path class="rb-hit" d="M 690 195 C 740 225 790 262 840 292 C 880 316 905 326 930 334" onClick="{{ openW2 }}"></path>
+          <path class="rb-hit" d="M 545 400 C 600 440 680 470 780 485 C 900 495 1000 490 1080 480" onClick="{{ openW2 }}"></path>
+          <path class="rb-hit" d="M 470 460 C 530 510 650 530 800 535 C 1000 538 1200 510 1460 498" onClick="{{ openW2 }}"></path>
+          <path class="rb-hit" d="M 560 430 C 640 510 760 545 900 555 C 1100 565 1300 550 1420 545" onClick="{{ openW3 }}"></path>
+          <path class="rb-hit" d="M 205 480 C 280 550 420 590 600 590 C 800 590 1050 585 1360 580" onClick="{{ openW3 }}"></path>
+          <path class="rb-hit" d="M 450 420 C 380 320 260 310 180 330 C 100 350 70 410 100 470" onClick="{{ openW3 }}"></path>
+          <path class="rb-hit" d="M 110 495 C 170 550 300 590 470 610 C 700 635 1000 620 1300 590" onClick="{{ openW4 }}"></path>
+          <path class="rb-hit" d="M 120 575 C 210 630 380 660 580 665 C 800 670 1000 660 1200 650" onClick="{{ openW4 }}"></path>
+          <path class="rb-hit" d="M 440 460 C 380 420 280 410 220 440 C 160 470 160 510 210 515" onClick="{{ openW4 }}"></path>
+          <path class="rb-hit" d="M 110 590 C 160 640 250 680 420 700 C 640 725 950 715 1260 695" onClick="{{ openW5 }}"></path>
+          <path class="rb-hit" d="M 215 665 C 320 705 470 735 680 735 C 880 735 1020 728 1120 725" onClick="{{ openW5 }}"></path>
+          <path class="rb-hit" d="M 420 510 C 360 460 250 460 180 490 C 120 515 110 560 150 590" onClick="{{ openW5 }}"></path>
+        </g>
+      </svg>
+      <div class="lens" aria-hidden="true">
+        <div class="lens-in">
+          <img src="./assets/3047f4e46c6508b5986bf1f4c5a373a1.jpg" alt="">
+          <svg viewBox="0 0 1472 952" aria-hidden="true">
+            <g class="rbg">
+              <text class="rb lt"><textPath class="tp" href="#rl1">Fall seven times, stand up eight. Fall seven times, stand up eight. Fall seven times, stand up eight.</textPath></text>
+              <text class="rb lt"><textPath class="tp" href="#rl2">One time, one meeting. One time, one meeting. One time, one meeting. One time, one meeting.</textPath></text>
+              <text class="rb lt"><textPath class="tp" href="#rl3">Even dust, piled up, becomes a mountain. Even dust, piled up, becomes a mountain. Even dust, piled up.</textPath></text>
+              <text class="rb lt"><textPath class="tp" href="#rl4">Even monkeys fall from trees. Even monkeys fall from trees. Even monkeys fall from trees.</textPath></text>
+              <text class="rb lt"><textPath class="tp" href="#rl5">If you wait, the weather turns fair. If you wait, the weather turns fair. If you wait.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb1">Fall seven times, stand up eight.   Fall seven times, stand up eight.   Fall seven times, stand up eight.   Fall seven times, stand up eight.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb2">After the rain, the earth hardens. After the rain, the earth hardens.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb3">One time, one meeting.   One time, one meeting.   One time, one meeting.   One time, one meeting.   One time, one meeting.   One time, one meeting.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb4">this moment will not come again,   one time, one meeting.   this moment will not come again,   one time, one meeting.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb5">After the rain, the earth hardens.   After the rain, the earth hardens.   After the rain.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb6">After the rain, the earth hardens.   After the rain, the earth hardens.   After the rain, the earth hardens.   After the rain, the earth hardens.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb7">Even dust, piled up, becomes a mountain.   Even dust, piled up, becomes a mountain.   Even dust, piled up, becomes a mountain.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb8">Even dust, piled up, becomes a mountain.   Even dust, piled up, becomes a mountain.   Even dust, piled up, becomes a mountain.   Even dust.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb9">Even monkeys fall from trees.   Even monkeys fall from trees.   Even monkeys fall from trees.   Even monkeys fall from trees.   Even monkeys fall.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb10">Even monkeys fall from trees.   Even monkeys fall from trees.   Even monkeys fall from trees.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb11">If you wait, the weather turns fair for the voyage.   If you wait, the weather turns fair for the voyage.   If you wait.</textPath></text>
+              <text class="rb dk"><textPath class="tp" href="#rb12">If you wait, the weather turns fair.   If you wait, the weather turns fair.   If you wait.</textPath></text>
+            </g>
+          </svg>
+        </div>
+        <span class="lens-shine"></span>
+      </div>
+    </div>
+
+    <div class="aside">
+      <sc-if value="{{ wClosed }}" hint-placeholder-val="{{ true }}">
+        <div class="floaters">
+          <sc-for list="{{ wFloat }}" as="b" hint-placeholder-count="6">
+            <button type="button" class="fb" style="left: {{ b.x }}%; top: {{ b.y }}%; width: {{ b.s }}px; height: {{ b.s }}px; --dur: {{ b.dur }}s; --del: {{ b.del }}s" onClick="{{ b.open }}" aria-label="{{ b.t }}"></button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ wOpen }}" hint-placeholder-val="{{ false }}">
+        <div class="bubble" role="dialog" aria-label="{{ w.en }}">
+          <p class="jp" lang="ja">{{ w.jp }}</p>
+          <p class="ro">{{ w.ro }}</p>
+          <p class="en">{{ w.en }}</p>
+          <sc-if value="{{ wHasMine }}" hint-placeholder-val="{{ false }}"><p class="mine">{{ w.mine }}</p></sc-if>
+          <sc-if value="{{ wEditing }}" hint-placeholder-val="{{ false }}">
+            <label class="sr" for="wnote">Your note on this branch</label>
+            <textarea id="wnote" class="ta" value="{{ wDraft }}" onChange="{{ onWDraft }}"></textarea>
+            <div class="row">
+              <button type="button" class="btn" onClick="{{ saveW }}">Save</button>
+              <button type="button" class="btn" onClick="{{ cancelW }}">Cancel</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ wCanEdit }}" hint-placeholder-val="{{ false }}">
+            <div class="row"><button type="button" class="btn" onClick="{{ editWOpen }}">Edit note</button></div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</section>
+
+<div class="seam" aria-hidden="true" style="height: clamp(280px, 28vw, 440px); background: linear-gradient(180deg, #a0bfd8 0%, #a9c1d2 9%, #b0c3d0 18%, #b3c5cd 36%, #b5c6c9 54%, #b7c4c6 72%, #b8c3c4 86%, #b9c3c3 100%)">
+</div>
+
+<!-- ============ 05 · MADE WITH LOVE AND CARE ============ -->
+<footer class="ft" aria-label="Made with love and care">
+  <img class="ft-bg" src="./assets/ca8690c1eb0259c379bf191f943a1ea5.jpg" alt="A tree-lined street in Indiranagar, Bengaluru, in black and white.">
+  <img class="ft-tiger" src="./assets/1656fed37786323a800c992317f7ccd6.jpg" alt="An ink-wash tiger lying asleep, signed 天明.">
+  <div class="ft-haze"></div>
+  <svg class="grain" aria-hidden="true"><rect width="100%" height="100%"></rect></svg>
+  <div class="ft-art">
+    <img src="./assets/fc07336bde0a13387bed01353deeb533.png" alt="White line-drawn loops woven through a Bengaluru skyline: Bangalore Palace, a rain tree, Vidhana Soudha, the metro and UB City on a music stave.">
+    <svg class="blr" viewBox="0 0 600 150" aria-hidden="true" style="display: none">
+      <path class="ln fine" d="M 0 128 H 600 M 0 132 H 600 M 0 136 H 600 M 0 140 H 600 M 0 144 H 600"></path>
+      <path class="ln fine" d="M 2 126 V 146 M 300 126 V 146 M 598 126 V 146"></path>
+      <path class="ln" d="M 40 128 L 44 106 H 106 L 110 128"></path>
+      <path class="ln" d="M 47 106 L 51 88 H 99 L 103 106"></path>
+      <path class="ln" d="M 54 88 L 58 72 H 92 L 96 88"></path>
+      <path class="ln" d="M 61 72 L 64 58 H 86 L 89 72"></path>
+      <path class="ln" d="M 64 58 C 63 46 87 46 86 58"></path>
+      <path class="ln fine" d="M 49 98 H 101 M 56 80 H 94 M 62 65 H 88 M 68 128 V 114 Q 75 106 82 114 V 128"></path>
+      <path class="ln" d="M 69 47 V 38 M 75 46 V 34 M 81 47 V 38"></path>
+      <ellipse class="wf" cx="67.5" cy="38.5" rx="2.4" ry="1.7" transform="rotate(-20 67.5 38.5)"></ellipse>
+      <ellipse class="wf" cx="73.5" cy="34.5" rx="2.4" ry="1.7" transform="rotate(-20 73.5 34.5)"></ellipse>
+      <ellipse class="wf" cx="79.5" cy="38.5" rx="2.4" ry="1.7" transform="rotate(-20 79.5 38.5)"></ellipse>
+      <path class="ln" d="M 142 128 C 143 116 140 108 142 98"></path>
+      <path class="ln fine" d="M 142 98 C 120 100 114 82 130 78 C 126 64 148 60 152 72 C 162 62 178 72 170 84 C 184 90 174 106 158 102 C 152 106 146 104 142 98"></path>
+      <path class="ln" d="M 176 128 V 100 H 334 V 128"></path>
+      <path class="ln fine" d="M 184 100 V 118 M 192 100 V 118 M 200 100 V 118 M 208 100 V 118 M 216 100 V 118 M 294 100 V 118 M 302 100 V 118 M 310 100 V 118 M 318 100 V 118 M 326 100 V 118 M 180 118 H 330"></path>
+      <path class="ln" d="M 228 100 V 82 H 282 V 100"></path>
+      <path class="ln fine" d="M 236 100 V 86 M 244 100 V 86 M 252 100 V 86 M 258 100 V 86 M 266 100 V 86 M 274 100 V 86"></path>
+      <path class="ln" d="M 224 82 L 255 70 L 286 82"></path>
+      <path class="ln" d="M 240 70 V 62 H 270 V 70"></path>
+      <path class="ln" d="M 238 62 C 238 38 272 38 272 62"></path>
+      <path class="ln" d="M 255 42 V 30"></path>
+      <use href="#star4" class="wf" transform="translate(255 26) scale(.5)"></use>
+      <path class="ln" d="M 186 100 C 186 90 200 90 200 100 M 310 100 C 310 90 324 90 324 100"></path>
+      <path class="ln ds" d="M 255 0 V 22 M 90 6 V 32 M 470 0 V 40"></path>
+      <path class="ln" d="M 340 108 H 600"></path>
+      <path class="ln fine" d="M 340 112 H 600"></path>
+      <path class="ln" d="M 368 112 V 128 M 432 112 V 128 M 496 112 V 128 M 560 112 V 128 M 360 114 H 376 M 424 114 H 440 M 488 114 H 504 M 552 114 H 568"></path>
+      <path class="ln" d="M 372 106 V 94 Q 372 88 379 88 H 470 Q 480 88 484 98 L 486 106 Z"></path>
+      <path class="ln fine" d="M 380 92 H 392 V 99 H 380 Z M 398 92 H 410 V 99 H 398 Z M 416 92 H 428 V 99 H 416 Z M 434 92 H 446 V 99 H 434 Z M 452 92 H 464 V 99 H 452 Z M 422 94 V 106"></path>
+      <path class="ln" d="M 506 108 V 46 H 532 V 108"></path>
+      <path class="ln" d="M 506 46 L 513 34 H 525 L 532 46"></path>
+      <path class="ln" d="M 519 34 V 14"></path>
+      <path class="ln" d="M 519 14 C 527 16 529 22 525 28"></path>
+      <ellipse class="wf" cx="516.5" cy="34" rx="2.6" ry="1.8" transform="rotate(-20 516.5 34)"></ellipse>
+      <path class="ln ds" d="M 512 54 H 526 M 512 62 H 526 M 512 70 H 526 M 512 78 H 526 M 512 86 H 526 M 512 94 H 526"></path>
+      <path class="ln" d="M 548 108 V 62 L 562 54 L 576 62 V 108"></path>
+      <path class="ln fine" d="M 553 70 H 571 M 553 78 H 571 M 553 86 H 571 M 553 94 H 571"></path>
+      <path class="ln" d="M 120 56 V 42 M 120 42 C 126 44 128 48 125 52 M 300 54 V 40 M 300 40 C 306 42 308 46 305 50 M 440 70 V 56 M 446 68 V 54 M 440 56 L 446 54 M 586 44 V 30 M 586 30 C 592 32 594 36 591 40"></path>
+      <ellipse class="wf" cx="117.5" cy="56.5" rx="3" ry="2.1" transform="rotate(-20 117.5 56.5)"></ellipse>
+      <ellipse class="wf" cx="297.5" cy="54.5" rx="3" ry="2.1" transform="rotate(-20 297.5 54.5)"></ellipse>
+      <ellipse class="wf" cx="437.5" cy="70.5" rx="3" ry="2.1" transform="rotate(-20 437.5 70.5)"></ellipse>
+      <ellipse class="wf" cx="443.5" cy="68.5" rx="3" ry="2.1" transform="rotate(-20 443.5 68.5)"></ellipse>
+      <ellipse class="wf" cx="583.5" cy="44.5" rx="3" ry="2.1" transform="rotate(-20 583.5 44.5)"></ellipse>
+      <use href="#star4" class="wf" transform="translate(16 120) scale(.6)"></use>
+      <use href="#star4" class="wf" transform="translate(592 100) scale(.55)"></use>
+    </svg>
+  </div>
+  <p class="ft-made">made with love and care</p>
+  <div class="ft-bar"><span>© 2026 Preeti K · Bengaluru</span><span>Indiranagar</span></div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"editMode":{"editor":"boolean","default":false,"section":"Owner"},"autoSpin":{"editor":"boolean","default":true,"section":"Thread Theory"},"$preview":{"width":1440,"height":7400}}'>
+var TG_V1={L:{w:52,h:71,rows:"                                                    |        005                                         | r     0006                                         | r    7725                                          | r    226                                           | r    745                                           | r    026                                           | r    787                                           | r    324                                           | r    343                                           | r    643                                           | rr   4016                                          |  r    750                                          |  rr   6304                                         |   rr   27457                                       |    rr   18317                                      |     r    519313                                    |   r rr    7948038                                  |    r r      714506                                 |  r r  9      547646                                |      999     9954413                               |     9999     98565534                              |    889998   9976777424                             |    956968  659999865310                            |   9868959957733344356996                           |   99486687679999988533337                          |   99445665742874467645877                          |   999874898695589644953345                         |  8999963999837999983386642                         |  9987786295995233335555436                         |  96536994783937999935999934                        |   8825897296396558565655358                        |     73569439613569754535555                        |      6643996487897397443446                        |         8689989954998269753                        |              893796737645532                       |              8898453897445445                      |              9952856489879617                      |              975968298134586159 999                |             88499839439733456530615   67           |            878996394978279348536411658017          |            94999297857397589367363356515454        |            9979879628599599368465568248646554      |            993959839983596178372764438038976237    |            8946995998499529918173639550986683667   |            999899999799929956919365939337245449999 |            999985749389959919937146969882764545699 |            999986965969869857939038965791922755795 |             99998992999767974939236673989773859988 |             99998995869695975596565693799245999887 |              976849793999495729497929256769675789  |              9577779929793948195799288547339397    |                 57599394849791965999399936985      |                 7579583848989298399965589994767    |                 949796774969939669936756 89997     |                 887647959629779996688     699      |                 999972673499999943452              |                  999547  8999999977598             |                  999999     9999999999             |                   999998      79999972             |                   999999       79998778            |                   99898998      9999995            |                   899889988      9998427           |                   998595984      99957998          |                    97595846       89999999         |                      98877         999999978       |                                    9999998677      |                                     489979694      |                                      99949393      |                                       9959686      |                                                    "},R:{w:52,h:74,rows:"                                                    |                                                    |                                                  r |                                         56       r |                                        4002      r |                                         3028     r |                                          672     r |                                          403     r |                                          875     r |                                          6359    r |                                          7627    r |                                          4358   r  |                                          778    r  |                                          001    r  |                                         5766   rr  |                                        6005   rr   |                                       76606  rr    |                                      46616  rr     |                                    549057   rr     |                                   162865   rr rr   |                                 6621948      rr    |                                941534        r rr  |                                34677      99       |                              4034479     9999      |                             23434679     89999     |                            54357985898   599499    |                           2245799999754  779468    |                          8787862333458978947949    |                          3344469999994346555759    |                         976752453467379996586899   |                         323357689966945997479999   |                        63677823899973999963987999  |                        8436654743335795565694749   |                        2699995499763865928993467   |                        634756566988953962996269    |                        4655244479532574497374      |                        54314589469997698449        |                       845796298953999              |                       145545837599589              |                      4456559983626999              |                     95158679836584499              |                    842695431793779757              |                52603475533895384699688             |          700976115635843982869495499758            |         7550753136376499679374789399979            |      6340468249654648738959958439879699            |     34758721913556273871696269967969397            |   9441988990459373818199349967996996796            |  98856974951939653919749939997988899996            | 897735325649959732839939968983939269996            | 698556559297568931929767977989469599996            | 69885505678937672293938796599929968996             | 99989986699749854759538968595949958895             | 8899794749942958693945594999398946845              |   9693974726591998493649486939995655               |      485737994699469378975696796747                |    98849899845899489489993938598767                |     76698 627529985957949739787848                 |      998     674588995963979734987                 |       88     356449999997176389996                 |              644577999855  544999                  |             6999999976     699996                  |             18999996       999996                  |             3459996       6999996                  |            59999996     897899996                  |            3389995     979897898                   |           7974798      857769398                   |          69999995      96477879                    |         69999996         889                       |       7579999996                                   |       789999973                                    |      565683999                                     |       8779499                                      |        999                                         "}};
+var TG={L:{w:50,h:71,rows:"                                                  |      301                                         |     5002                                         |     751                                          |     048                                          |    853                                           |    313                                           |    786                                           |    622                                           |    5447                                          |    8545                                          |     003                                          |     7722                                         |      6017                                        |      45546                                       |       438047                                     |        8349035                                   |         7858306                                  |           751712                                 |      9     764753                                |    9999     9745417                              |   99999     96655534                             |  997997    8956776246                            |  893994  8579999664214                           |  9579699848433343468978                          |  9685588768999989743324                          |  95646466625954577546878                         | 899893599688459753683333                         | 9999847999549999953576535                        | 9986945667993333263654347                        | 9371989194764999963899960                        |  761899279278557674755436                        |   73739817922558936444553                        |     4727975677884785533458                       |        7699999837995289645                       |             954994738445426                      |             989626498545534                      |             9925755599797428                     |            993977469514478327 8 9                |            76899567369534565403337   5           |           86999276697539727835621467404          |          976995797746595698293543457154365       |          99899599267796996394736495177747445     |          997596938995479239471838138315969223    |          99929995994799179637283187433956854669  |           99979899889957992973571976808425537999 |           999964946599599469933609699847554455898|           999978919699599497935429593955525764994|           999989974999469695764625657896947689898|            9998999387955969189294396769732999997 |            993776977699687918949748743948974779  |             8579499759758863695798394837177698   |               845995877299846964995699748948     |               9397958393989569759975569998458    |               977797693995958939973774  79988    |                96935987927949998669     8799     |                999852763799999733535             |                8997459  999999897679             |                 999999     9999999998            |                 999999       79999852            |                 9999999       8999667            |                 999898988     99999995           |                  999798989     99996158          |                  993978758      9976899          |                   95877469      89999999         |                     99779        999999988       |                                   999989756      |                                   5699798776     |                                     99488484     |                                      968868      |                                                  "},R:{w:50,h:72,rows:"                                                  |                                        6007      |                                         000      |                                         7286     |                                          610     |                                          658     |                                          710     |                                          8878    |                                          6148    |                                          554     |                                          445     |                                         8302     |                                         0368     |                                        6117      |                                       64656      |                                     842826       |                                   6209338        |                                  505767          |                                 247066           |                                576367     99     |                               334588     9999    |                              4555569     99999   |                            6124555699    799799  |                            22346999885   599388  |                           378645654358479959738  |                          7443677679998778845969  |                          48745898559616665766599 |                         643495135974796996398999 |                         235544799999549999479899 |                        76545835354337995844966899|                        4189963598997593947993547 |                        584569466854692891998348  |                        33566373996641792794728   |                        766544674886684698275     |                        367425898389989976        |                       512359366994599            |                      8334466946369989            |                      4299989755751899            |                     53444435973769499            |                 6935743554653774999479           |           44  7223125647724985482899789          |          630834023683894595558879299849          |       762343488445639289959766289689899          |     74463667704837275933976688829969397          |    622959860647274535496189639995986496          |   7553965980749563919289829997998998996          | 899826643925949643829929959985958579996          | 998534348497969731839958978976739379996          | 497577438299377921929477966999299699997          | 88997848698948853476728887597939968995           | 8989996359953966494965795989495966758            |  987657957652939993935493989399947825            |    89393474787299559365956594998645              |      769759984999469389993859495857              |    87539997364599589489694864799577              |     89998  78734595986938939974858               |      896     599999996992478338996               |              300026999996695558996               |             699999999666   669997                |             599999995      799996                |             02699995      6999996                |            79999995      97999996                |            2899997      99887999                 |           68138995     859889497                 |          79999996      854768599                 |          7999998        76898                    |        769999996                                 |       768999985                                  |      6677969977                                  |      57578499                                    |       877879                                     |                                                  "}};
+var POSTERS=[
+  ['3c8ee0945cde36d073a660e726884732',88,65,'Slow down, enjoy life'],
+  ['d36a15c92fdd06ef8683be5951894d6a',87,107,'Let them be them'],
+  ['127f37b621cf3518008cd562a8c9971f',89,110,'The sun will rise and shine again'],
+  ['34b565d9b279d3550ddd5ed39322808b',90,111,'Nothing changes if nothing changes'],
+  ['8c3ef226e3ae0d1aa616e50810008749',88,87,'Listen to your heart'],
+  ['5c14289efd40a0d7915b058ef8181429',174,97,'My figs cannot rot — I am the tree'],
+  ['a4d7add47fd7920d0b30f7cf276f02d5',118,117,'Enjoy the now'],
+  ['720589e9d093cace6a9718f5794dceac',115,115,'Let it happen'],
+  ['bcd58727b010b9186a131cad3a1e6c88',88,87,'One day I am gonna grow wings'],
+  ['b8f44bdc1127f80aed6e227c078bec8c',127,76,'You don’t have to be perfect'],
+  ['15aa244036f36ca72b5b3168237a9105',140,96,'Joy has a habit of returning'],
+  ['972f20fcd8c4a2413e6dba302e59183c',100,125,'The earth has music for those who listen'],
+  ['99ba7f2e71a13865ce729b5b96adb3c2',103,102,'Life is good']
+];
+var TILES=[
+  ['f4d8784649058a22d2cde802a7187789',98,56],['237dd234834c462b7923c561bdc0efd3',61,56],['0264df43d86026174927a37887fdbd5f',107,74],['32239e180e40cd2db759b2d51c706672',48,65],
+  ['2bd8301217fa5e4aef872d4e119f4c55',87,66],['5318bda238b4d70630530a5208f817ac',94,73],['32cd8c2d30646b465a484fcbfcb98562',86,63],['a9a610861cf2474454b64cf68b2ad542',106,69],
+  ['6f7eea806535571cdf0c0aeb79eee14a',105,72],['9c0641a3ba1e7978c871374d321b0d16',84,60],['959d97e1defb33c2d810fa55c77be067',76,47],['b5181e7b3c912b9d89971e7f98192621',109,71],
+  ['37b374f9bbdf91f56fa14432f73745a2',98,56],['ddb72e983c996c9aa4d49e3e029fdc29',97,69],['6c81374a5f664569bbf8950ec4250a8f',111,72],['839bc2ed560afd823bd3d4edb2b5d896',79,48],
+  ['4a4342634961e29bea14e6f163272c5d',106,72],['4f167196e79544151388ecb97e6b80c9',65,96],['34ce310c1e5e9241f4a34d750513b5fb',97,71],['ea40ae4351e9ab7ede04eadcaa41d257',116,87],
+  ['0dcfb438d9f16d2bd8a50b5f346eb9ee',78,53],['2a809d117c2d19cf69f86a1519bb39c6',97,71],['e0c7e61d7e06302a6cdf8e4d534f0b91',98,59],['dbaec86915aa21c7871296f7e118fdc3',67,92],
+  ['de1717454ec1297a9f8d1948a7b19ab8',107,74],['8985eeef8177f37a87fa3bee1de391e9',70,82],['aee6641eaf0d19d659277393827e62a6',94,70],['463f1cc785cf687b51a09cce6db5a7a8',84,75]
+];
+var WIND=[
+  {jp:'七転び八起き',ro:'nana korobi ya oki',en:'Fall seven times, stand up eight.'},
+  {jp:'一期一会',ro:'ichi-go ichi-e',en:'One time, one meeting — this moment will not come again.'},
+  {jp:'雨降って地固まる',ro:'ame futte ji katamaru',en:'After the rain, the earth hardens.'},
+  {jp:'塵も積もれば山となる',ro:'chiri mo tsumoreba yama to naru',en:'Even dust, piled up, becomes a mountain.'},
+  {jp:'猿も木から落ちる',ro:'saru mo ki kara ochiru',en:'Even monkeys fall from trees.'},
+  {jp:'待てば海路の日和あり',ro:'mateba kairo no hiyori ari',en:'If you wait, the weather turns fair for the voyage.'}
+];
+function buildNodes(){
+  var list=[], i, n=POSTERS.length+TILES.length, golden=Math.PI*(3-Math.sqrt(5));
+  var items=[];
+  for(i=0;i<POSTERS.length;i++) items.push({kind:'post',u:POSTERS[i][0],w:POSTERS[i][1],h:POSTERS[i][2],label:POSTERS[i][3]});
+  for(i=0;i<TILES.length;i++) items.push({kind:'tile',u:TILES[i][0],w:TILES[i][1],h:TILES[i][2],label:'Frame '+String(i+1).padStart(2,'0')});
+  var order=[]; var pi=0, ti=0;
+  for(i=0;i<n;i++){ if(i%3===1 && pi<POSTERS.length) order.push(items[pi++]); else if(ti<TILES.length) order.push(items[POSTERS.length+(ti++)]); else order.push(items[pi++]); }
+  for(i=0;i<n;i++){
+    var y=1-(i/(n-1))*2, r=Math.sqrt(1-y*y), th=golden*i;
+    var it=order[i], R=it.kind==='post'?0.8:1.0;
+    var jx=Math.sin(i*12.9898)*0.06, jy=Math.cos(i*78.233)*0.05;
+    it.x=(Math.cos(th)*r+jx)*R; it.y=(y*0.82+jy)*R; it.z=(Math.sin(th)*r)*R;
+    var big=it.kind==='post'?7.2:8.4; it.bw=Math.round(big*Math.sqrt(it.w/it.h)*10)/10;
+    it.idx=i; list.push(it);
+  }
+  return list;
+}
+var NODES=buildNodes();
+function hash(i,j){var s=Math.sin(i*127.1+j*311.7)*43758.5453;return s-Math.floor(s);}
+function cl(v){return Math.max(0,Math.min(1,v));}
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    var saved={};
+    try{ var raw=window.localStorage.getItem('pk-site-v2'); if(raw) saved=JSON.parse(raw)||{}; }catch(e){ saved={}; }
+    this.state={
+      active:null, editT:false, tDraft:'', tData:saved.tData||{},
+      posts:saved.posts||[], modal:false, dFrom:'', dNote:'', dImg:null,
+      wind:null, wEdit:false, wDraft:'', wData:saved.wData||{}, hov:false, drag:false
+    };
+    this.cam={yaw:0.35,pitch:-0.12,k:1,vy:0,vp:0,tYaw:null,tPitch:null,tK:1};
+    this.hero={p:0,a:0,g:0,d:0,arc:0};
+    this.raf=0; this.loopOn=false; this.t0=performance.now();
+    this.onScroll=this.onScroll.bind(this); this.frame=this.frame.bind(this); this.onResize=this.onResize.bind(this);
+  }
+  componentDidMount(){
+    window.addEventListener('scroll',this.onScroll,{passive:true,capture:true});
+    window.addEventListener('resize',this.onResize);
+    this.onResize();
+    this.kick();
+  }
+  componentWillUnmount(){
+    window.removeEventListener('scroll',this.onScroll,{capture:true});
+    window.removeEventListener('resize',this.onResize);
+    if(this.raf) cancelAnimationFrame(this.raf);
+  }
+  componentDidUpdate(pp,ps){
+    var s=this.state;
+    if(ps.tData!==s.tData||ps.posts!==s.posts||ps.wData!==s.wData){
+      try{ window.localStorage.setItem('pk-site-v2',JSON.stringify({tData:s.tData,posts:s.posts,wData:s.wData})); }catch(e){}
+    }
+    if(ps.active!==s.active) this.focusCam(s.active);
+  }
+  onResize(){
+    var st=document.querySelector('.stage'), li=document.querySelector('.lens-in');
+    if(st&&li){ li.style.width=(st.clientWidth*2.3)+'px'; li.style.height=(st.clientHeight*2.3)+'px'; }
+    this.sizeCanvases(); this.onScroll();
+  }
+  sizeCanvases(){
+    var dpr=Math.min(2,window.devicePixelRatio||1);
+    ['.tg-cv-l','.tg-cv-r','.th-cv'].forEach(function(sel){
+      var c=document.querySelector(sel); if(!c) return;
+      c.width=Math.round(c.clientWidth*dpr); c.height=Math.round(c.clientHeight*dpr); c._dpr=dpr;
+    });
+  }
+  onScroll(){ this.kick(); }
+  kick(){ if(!this.raf) this.raf=requestAnimationFrame(this.frame); }
+  frame(now){
+    this.raf=0;
+    var busy=false;
+    busy=this.heroFrame(now)||busy;
+    busy=this.threadFrame(now)||busy;
+    busy=this.windFrame(now)||busy;
+    if(busy) this.kick();
+  }
+  inView(el){ if(!el) return false; var r=el.getBoundingClientRect(); var vh=window.innerHeight||800; return r.bottom>-50&&r.top<vh+50; }
+
+  /* ---- hero: pounce, dissolve to digits, dive ---- */
+  heroFrame(now){
+    var hero=document.querySelector('.hero'); if(!hero) return false;
+    var stick=hero.querySelector('.hero-stick'); if(!stick) return false;
+    var r=hero.getBoundingClientRect();
+    var total=Math.max(1,hero.offsetHeight-stick.offsetHeight);
+    var p=cl(-r.top/total);
+    var a=ease(cl(p/0.4)), g=cl((p-0.3)/0.16), d=ease(cl((p-0.52)/0.48)), arc=Math.sin(Math.PI*cl(p/0.4));
+    var tl=hero.querySelector('.tg.l'); var sw=stick.clientWidth, sh=stick.clientHeight;
+    var mx=tl? (sw/2-(tl.offsetLeft+tl.offsetWidth*0.9)) : 300;
+    var s=hero.style;
+    s.setProperty('--p',p.toFixed(4)); s.setProperty('--a',a.toFixed(4)); s.setProperty('--g',g.toFixed(4)); s.setProperty('--d',d.toFixed(4));
+    s.setProperty('--arc',arc.toFixed(4)); s.setProperty('--mx',mx.toFixed(1)); s.setProperty('--rise',(sh*0.14).toFixed(1)); s.setProperty('--dy',(sh*0.95).toFixed(1));
+    var vis=this.inView(stick)&&r.bottom>0;
+    if(g>0.001&&vis){ this.drawDigits('.tg-cv-l',TG.L,406,570,g,d,now); this.drawDigits('.tg-cv-r',TG.R,402,578,g,d,now); return d<0.999; }
+    if(this._digitsOn){ this.clearCv('.tg-cv-l'); this.clearCv('.tg-cv-r'); this._digitsOn=false; }
+    return false;
+  }
+  clearCv(sel){ var c=document.querySelector(sel); if(c){ c.getContext('2d').clearRect(0,0,c.width,c.height); } }
+  drawDigits(sel,grid,iw,ih,g,d,now){
+    var c=document.querySelector(sel); if(!c||!c.width) return;
+    this._digitsOn=true;
+    var ctx=c.getContext('2d'); var W=c.width, H=c.height;
+    ctx.clearRect(0,0,W,H);
+    var ox=W*0.1875, oy=H*0.1875, bw=W*0.625, bh=H*0.625;
+    var cell=bw*8/iw; var t=(now-this.t0)/1000;
+    ctx.font=(cell*1.25).toFixed(1)+'px "IBM Plex Mono", monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    var rows=grid.rows.split('|');
+    for(var j=0;j<rows.length;j++){
+      var row=rows[j];
+      for(var i=0;i<row.length;i++){
+        var ch=row.charAt(i); if(ch===' ') continue;
+        var h=hash(i,j);
+        var ap=cl((g*1.7-h*0.7)/0.35); if(ap<=0) continue;
+        var fall=Math.pow(d,1.5)*(0.35+h)*bh*1.1, drift=Math.sin(h*40+j)*d*cell*6;
+        var al=ap*(1-d*0.9);
+        var x=ox+(i+0.5)*cell+drift, y=oy+(j+0.5)*cell+fall;
+        var col;
+        if(ch==='r') col='255,112,98';
+        else { var b=+ch; col=b<=3?'176,232,255':(b<=6?'120,178,246':'92,132,226'); al*= b<=3?1:(b<=6?0.85:0.5); }
+        ctx.fillStyle='rgba('+col+','+al.toFixed(3)+')';
+        var digit=ch==='r'? '1' : String((i*7+j*13+Math.floor(t*6+h*10))%10);
+        ctx.fillText(digit,x,y);
+      }
+    }
+  }
+
+  /* ---- thread theory: 3D index ---- */
+  focusCam(i){
+    var c=this.cam;
+    if(i===null||i===undefined){ c.tYaw=null; c.tPitch=null; c.tK=1; this.kick(); return; }
+    var n=NODES[i]; var rr=Math.sqrt(n.x*n.x+n.z*n.z);
+    var yaw=Math.atan2(n.x,-n.z); var pitch=-Math.atan2(n.y,rr);
+    var cur=c.yaw; var dy=yaw-cur; dy=Math.atan2(Math.sin(dy),Math.cos(dy));
+    c.tYaw=cur+dy; c.tPitch=pitch; c.tK=2.3; this.kick();
+  }
+  threadFrame(now){
+    var scene=document.querySelector('.scene'); if(!scene) return false;
+    if(!this.inView(scene)) return false;
+    var c=this.cam, s=this.state;
+    var spin=(this.props.autoSpin ?? true);
+    if(c.tYaw!==null){ c.yaw+=(c.tYaw-c.yaw)*0.07; c.pitch+=(c.tPitch-c.pitch)*0.07; }
+    else if(!s.drag){ c.yaw+=c.vy; c.pitch+=c.vp; c.vy*=0.94; c.vp*=0.9; if(spin&&Math.abs(c.vy)<0.0009) c.yaw+=0.0011; c.pitch+=(-0.12-c.pitch)*0.01; }
+    c.k+=(c.tK-c.k)*0.07;
+    c.pitch=Math.max(-0.9,Math.min(0.9,c.pitch));
+    var W=scene.clientWidth, H=scene.clientHeight, cx=W/2, cy=H*0.39;
+    var Rx=W*0.43, Ry=H*0.34, f=2.4;
+    var cyw=Math.cos(c.yaw), syw=Math.sin(c.yaw), cp=Math.cos(c.pitch), sp=Math.sin(c.pitch);
+    var els=scene.querySelectorAll('.tn');
+    var girl=scene.querySelector('.girl'); var gr=girl?girl.getBoundingClientRect():null; var sr=scene.getBoundingClientRect();
+    var hx=gr? gr.left-sr.left+gr.width*0.37 : cx, hy=gr? gr.top-sr.top+gr.height*0.01 : cy-H*0.2;
+    var cv=scene.querySelector('.th-cv'); var ctx=cv&&cv.width?cv.getContext('2d'):null; var dpr=(cv&&cv._dpr)||1;
+    if(ctx){ ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); }
+    var proj=[];
+    for(var i=0;i<NODES.length&&i<els.length;i++){
+      var n=NODES[i];
+      var x1=n.x*cyw+n.z*syw, z1=-n.x*syw+n.z*cyw;
+      var y2=n.y*cp-z1*sp, z2=n.y*sp+z1*cp;
+      var sc=f/(f+z2);
+      var px=cx+x1*sc*Rx*c.k, py=cy+y2*sc*Ry*c.k;
+      proj.push({i:i,px:px,py:py,z:z2,sc:sc*c.k});
+    }
+    var act=s.active;
+    for(var q=0;q<proj.length;q++){
+      var P=proj[q], el=els[P.i], N=NODES[P.i];
+      var tilt=Math.max(-40,Math.min(40,(P.px-cx)/W*-50));
+      el.style.transform='translate('+P.px.toFixed(1)+'px,'+P.py.toFixed(1)+'px) translate(-50%,-50%) perspective(700px) rotateY('+tilt.toFixed(1)+'deg) scale('+P.sc.toFixed(3)+')';
+      var depth=(P.z+1)/2;
+      var blur=act===null? Math.max(0,depth-0.35)*4 : (P.i===act?0:3.2);
+      var bri=act===null? (1.1-depth*0.55) : (P.i===act?1.05:0.35);
+      el.style.filter='blur('+blur.toFixed(2)+'px) brightness('+bri.toFixed(2)+')';
+      el.style.zIndex=String(P.z<0.05?20+Math.round((1-depth)*10):1+Math.round((1-depth)*10));
+    }
+    if(ctx){
+      for(var k=0;k<proj.length;k++){
+        var Q=proj[k], M=NODES[Q.i];
+        var red=M.kind==='post';
+        var on=act===Q.i, dim=act!==null&&!on;
+        var mx=(hx+Q.px)/2, my=Math.min(hy,Q.py)-H*0.18-Math.abs(Q.px-hx)*0.12;
+        ctx.beginPath(); ctx.moveTo(hx,hy); ctx.quadraticCurveTo(mx,my,Q.px,Q.py);
+        var al=dim?0.12:(on?1:(0.55-((Q.z+1)/2)*0.25));
+        ctx.lineWidth=on?2:1.1;
+        ctx.strokeStyle=red?'rgba(232,74,62,'+al.toFixed(3)+')':'rgba(236,240,255,'+(al*0.8).toFixed(3)+')';
+        ctx.shadowColor=red?'rgba(255,60,50,.8)':'rgba(255,255,255,.7)'; ctx.shadowBlur=on?10:5;
+        ctx.stroke();
+      }
+      ctx.shadowBlur=0;
+    }
+    return true;
+  }
+  thDown(e){
+    if(e.target&&e.target.closest&&e.target.closest('.th-note')) return;
+    this.dragInfo={x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,moved:false,id:e.pointerId};
+    this.cam.vy=0; this.cam.vp=0;
+  }
+  thMove(e){
+    var d=this.dragInfo; if(!d) return;
+    var dx=e.clientX-d.lx, dy=e.clientY-d.ly; d.lx=e.clientX; d.ly=e.clientY;
+    if(!d.moved&&Math.hypot(e.clientX-d.x,e.clientY-d.y)>6){ d.moved=true; this.setState({drag:true}); try{ e.currentTarget.setPointerCapture(d.id); }catch(err){} if(this.state.active!==null) this.setState({active:null,editT:false}); }
+    if(d.moved){ this.cam.yaw+=dx*0.006; this.cam.pitch+=dy*0.004; this.cam.vy=dx*0.006; this.cam.vp=dy*0.002; this.cam.tYaw=null; this.kick(); }
+  }
+  thUp(e){
+    var d=this.dragInfo; this.dragInfo=null;
+    if(d&&d.moved){ this.justDragged=true; var self=this; setTimeout(function(){ self.justDragged=false; },60); this.setState({drag:false}); }
+  }
+
+  /* ---- wind: bubble lens + drifting sentences ---- */
+  windFrame(now){
+    var st=document.querySelector('.stage'); if(!st||!this.inView(st)) return false;
+    var t=(now-this.t0)/1000;
+    var tps=document.querySelectorAll('.wind .tp');
+    for(var i=0;i<tps.length;i++){
+      var k=i%17; var sp=0.8+((k*37)%10)/14;
+      var off=-(7+7*Math.sin(t*0.22*sp+k*1.7));
+      tps[i].setAttribute('startOffset',off.toFixed(2)+'%');
+    }
+    var g=document.querySelectorAll('.wind .rbg');
+    var sway=Math.sin(t*0.6)*0.5;
+    for(var j=0;j<g.length;j++){ g[j].setAttribute('transform','rotate('+sway.toFixed(3)+' 490 952)'); }
+    return true;
+  }
+  moveLens(e){
+    var st=e.currentTarget; var r=st.getBoundingClientRect();
+    var x=e.clientX-r.left, y=e.clientY-r.top; var L=170, Z=2.3;
+    var lens=st.querySelector('.lens'), inn=st.querySelector('.lens-in');
+    if(lens) lens.style.transform='translate('+(x-L/2)+'px,'+(y-L/2)+'px)';
+    if(inn) inn.style.transform='translate('+(L/2-x*Z)+'px,'+(L/2-y*Z)+'px)';
+  }
+  openW(i){ this.setState({wind:null,wEdit:false}); var self=this; requestAnimationFrame(function(){ self.setState({wind:i}); }); }
+
+  readImg(file,max){
+    return new Promise(function(resolve,reject){
+      var url=URL.createObjectURL(file); var im=new Image();
+      im.onload=function(){ try{ var sc=Math.min(1,max/Math.max(im.width,im.height)); var c=document.createElement('canvas'); c.width=Math.round(im.width*sc); c.height=Math.round(im.height*sc); c.getContext('2d').drawImage(im,0,0,c.width,c.height); URL.revokeObjectURL(url); resolve(c.toDataURL('image/jpeg',0.84)); }catch(e){ resolve(url); } };
+      im.onerror=reject; im.src=url;
+    });
+  }
+  patchT(i,patch){ this.setState(function(s){ var n=Object.assign({},s.tData); n[i]=Object.assign({},s.tData[i]||{},patch); return {tData:n}; }); }
+  scrollTrack(dir){ var t=document.querySelector('.pc-track'); if(t) t.scrollBy({left:dir*Math.min(400,t.clientWidth*0.8),behavior:'smooth'}); }
+
+  renderVals(){
+    var self=this, s=this.state;
+    var nodes=NODES.map(function(n,i){
+      var dat=s.tData[i]||{};
+      return { cls:(n.kind==='post'?'post':'tile')+(s.active===i?' act':''), bw:n.bw, src:dat.img||('/_blob/'+n.u),
+        aria:'Follow the thread: '+n.label,
+        open:function(){ if(self.justDragged) return; self.setState({active:s.active===i?null:i, editT:false}); } };
+    });
+    var hasActive=s.active!==null, ai=hasActive?s.active:0, an=NODES[ai], adat=s.tData[ai]||{};
+    var posts=s.posts.map(function(p){ return {from:p.from,note:p.note,img:p.img||'',hasImg:!!p.img,stamp:p.stamp}; });
+    var wOpen=s.wind!==null, wi=wOpen?s.wind:0, W=WIND[wi];
+    var editMode=!!(this.props.editMode ?? false);
+    var dotPos=[[68,19.5],[69,36],[79,54],[64,61.5],[47.5,70],[61,77]];
+    return {
+      editMode:editMode,
+      sceneCls:(hasActive?'focus':'')+(s.drag?' drag':''),
+      nodes:nodes,
+      thDown:function(e){ self.thDown(e); }, thMove:function(e){ self.thMove(e); }, thUp:function(e){ self.thUp(e); },
+      stop:function(e){ e.stopPropagation(); },
+      hasActive:hasActive,
+      act:{ label:an.label, idx:String(ai+1).padStart(2,'0')+' / '+NODES.length, kind:an.kind==='post'?'poster':'photograph',
+        note:adat.note||(editMode?'[Your note for this thread — tap Edit note]':''), hasNote:!!adat.note||editMode, imgLabel:adat.img?'Replace image':'Upload image' },
+      editT:s.editT, editTOn:editMode&&s.editT, notEditT:!(editMode&&s.editT), tDraft:s.tDraft,
+      onTDraft:function(e){ self.setState({tDraft:e.target.value}); },
+      editTOpen:function(){ self.setState({editT:true,tDraft:(s.tData[ai]||{}).note||''}); },
+      saveT:function(){ self.patchT(ai,{note:s.tDraft.trim()}); self.setState({editT:false}); },
+      cancelT:function(){ self.setState({editT:false}); },
+      closeT:function(){ self.setState({active:null,editT:false}); },
+      prevT:function(){ self.setState({active:(ai+NODES.length-1)%NODES.length,editT:false}); },
+      nextT:function(){ self.setState({active:(ai+1)%NODES.length,editT:false}); },
+      uploadT:function(e){ var f=e.target.files&&e.target.files[0]; if(!f) return; var inp=e.target; self.readImg(f,900).then(function(u){ self.patchT(ai,{img:u}); inp.value=''; }); },
+
+      posts:posts,
+      scrollL:function(){ self.scrollTrack(-1); }, scrollR:function(){ self.scrollTrack(1); },
+      modal:s.modal, openModal:function(){ self.setState({modal:true}); }, closeModal:function(){ self.setState({modal:false}); },
+      dFrom:s.dFrom, dNote:s.dNote, dImg:s.dImg||'', dHasImg:!!s.dImg, dNoImg:!s.dImg,
+      dImgLabel:s.dImg?'Photo added — tap to change':'Tap to add a photo',
+      noteCount:s.dNote.length+' / 220', cantSend:!(s.dFrom.trim()&&s.dNote.trim()),
+      onFrom:function(e){ self.setState({dFrom:e.target.value.slice(0,40)}); },
+      onNote:function(e){ self.setState({dNote:e.target.value.slice(0,220)}); },
+      onDImg:function(e){ var f=e.target.files&&e.target.files[0]; if(!f) return; self.readImg(f,1000).then(function(u){ self.setState({dImg:u}); }); },
+      submitCard:function(e){
+        if(e&&e.preventDefault) e.preventDefault();
+        if(!(s.dFrom.trim()&&s.dNote.trim())) return;
+        var now=new Date(); var yy=String(now.getFullYear()).slice(2), mm=String(now.getMonth()+1).padStart(2,'0'), dd=String(now.getDate()).padStart(2,'0');
+        var card={from:s.dFrom.trim(),note:s.dNote.trim(),img:s.dImg,stamp:"'"+yy+' '+mm+' '+dd};
+        self.setState({posts:[card].concat(s.posts),modal:false,dFrom:'',dNote:'',dImg:null},function(){ setTimeout(function(){ var t=document.querySelector('.pc-track'); if(t) t.scrollTo({left:0,behavior:'smooth'}); },60); });
+      },
+
+      stageCls:s.hov?'hov':'',
+      wMove:function(e){ self.moveLens(e); if(!s.hov) self.setState({hov:true}); },
+      wEnter:function(e){ self.moveLens(e); self.setState({hov:true}); },
+      wLeave:function(){ self.setState({hov:false}); },
+      openW0:function(){ self.openW(0); }, openW1:function(){ self.openW(1); }, openW2:function(){ self.openW(2); },
+      openW3:function(){ self.openW(3); }, openW4:function(){ self.openW(4); }, openW5:function(){ self.openW(5); },
+      wDots:WIND.map(function(w,i){ return {t:w.en, x:dotPos[i][0], y:dotPos[i][1], cls:s.wind===i?'on':'', open:function(e){ if(e&&e.stopPropagation) e.stopPropagation(); if(s.wind===i){ self.setState({wind:null,wEdit:false}); } else self.openW(i); }}; }),
+      wAway:function(e){ var t=e.target; if(t&&t.closest&&t.closest('.bubble, .fb, .rb-hit')) return; if(s.wind!==null) self.setState({wind:null,wEdit:false}); },
+      wFloat:WIND.map(function(w,i){ var L=[[4,8,26,9],[11,20,14,11],[90,6,22,10],[94,70,30,12],[6,80,18,13],[85,86,12,9.5]][i]; return {t:w.en, x:L[0], y:L[1], s:L[2], dur:L[3], del:-i*1.7, open:function(e){ if(e&&e.stopPropagation) e.stopPropagation(); self.openW(i); }}; }),
+      wOpen:wOpen, wClosed:!wOpen,
+      w:{ jp:W.jp, ro:W.ro, en:W.en, mine:s.wData[wi]||'' },
+      wHasMine:!!s.wData[wi]&&!s.wEdit, wEditing:editMode&&s.wEdit, wCanEdit:editMode&&!s.wEdit,
+      wEdit:s.wEdit, wDraft:s.wDraft,
+      onWDraft:function(e){ self.setState({wDraft:e.target.value}); },
+      editWOpen:function(){ self.setState({wEdit:true,wDraft:s.wData[wi]||''}); },
+      saveW:function(){ var n=Object.assign({},s.wData); n[wi]=s.wDraft.trim(); self.setState({wData:n,wEdit:false}); },
+      cancelW:function(){ self.setState({wEdit:false}); },
+      closeW:function(){ self.setState({wind:null,wEdit:false}); }
+    };
+  }
+}
+</script>
+</body>
+</html>

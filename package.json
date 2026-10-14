@@ -1,0 +1,21 @@
+{
+  "name": "preeti-k-site",
+  "version": "1.0.0",
+  "description": "Preeti K personal website",
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "npm run build && wrangler pages dev dist --port 8788",
+    "db:setup:local": "wrangler d1 migrations apply preetik-postcards --local",
+    "db:setup": "wrangler d1 migrations apply preetik-postcards --remote",
+    "deploy:preview": "npm test && npm run build && wrangler pages deploy dist --branch preview",
+    "deploy": "npm test && npm run build && wrangler pages deploy dist --branch main"
+  },
+  "type": "module",
+  "devDependencies": {
+    "sharp": "^0.35.5",
+    "wrangler": "^4.151.0"
+  },
+  "private": true
+}

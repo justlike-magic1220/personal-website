@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Postbox · Preeti K</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Caveat:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap">
+<style>
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;min-height:100svh;background:#a5b3c8;color:#14213a;font-family:'Manrope',system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 16px 64px}
+h1{margin:0 0 4px;font-family:'Ballet',cursive;font-weight:400;font-size:clamp(44px,8vw,72px);line-height:1.1}
+.lede{margin:0 0 24px;font-size:14px;color:rgba(20,33,58,.8)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(13,20,38,.32);background:rgba(255,255,255,.4);color:#0d1426;font:500 13px 'Manrope',sans-serif;cursor:pointer}
+.btn:hover{background:rgba(255,255,255,.65)}
+.btn:focus-visible,.inp:focus-visible{outline:2px solid #0d1426;outline-offset:2px}
+.btn.solid{background:#1c2a44;color:#efe6d3;border-color:#1c2a44}
+.btn.danger{border-color:#7a2f22;color:#7a2f22}
+.btn.danger.armed{background:#7a2f22;color:#fff}
+.inp{min-height:44px;padding:10px 12px;border-radius:6px;border:1px solid rgba(28,42,68,.3);background:#fbf7ee;color:#1c2a44;font:15px 'Manrope',sans-serif;width:min(320px,100%)}
+form{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.flabel{display:block;margin-bottom:6px;font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase}
+.msg{min-height:1.4em;margin:12px 0;font-size:14px}
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin:8px 0 16px}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+li{display:grid;grid-template-columns:84px 1fr;gap:14px;padding:12px;border-radius:8px;background:#efe6d3;box-shadow:0 8px 24px rgba(20,33,58,.12)}
+li.hidden{opacity:.55;background:#ddd5c4}
+li img{width:84px;height:84px;object-fit:cover;border-radius:4px}
+.who{font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:rgba(28,42,68,.75)}
+.note{margin:4px 0 10px;font-family:'Caveat',cursive;font-size:22px;line-height:1.2;color:#24395f;overflow-wrap:anywhere}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.tag{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:#7a2f22;color:#fff;font-size:10px;letter-spacing:.08em}
+.empty{padding:24px;text-align:center;font-style:italic}
+a{color:#14213a}
+</style>
+</head>
+<body>
+<main>
+  <h1>The postbox</h1>
+  <p class="lede">Visitor postcards. <strong>Hide</strong> takes one off the site but keeps it so you can bring it back; <strong>Delete</strong> removes it for good. <a href="/">Back to the site</a></p>
+
+  <form id="login">
+    <div>
+      <label class="flabel" for="pw">Admin password</label>
+      <input id="pw" class="inp" type="password" autocomplete="current-password" required>
+    </div>
+    <button class="btn solid" type="submit" style="align-self:flex-end">Open the postbox</button>
+  </form>
+  <p class="msg" id="msg" role="status"></p>
+
+  <section id="box" hidden>
+    <div class="bar"><span id="count"></span><span><button class="btn" id="refresh" type="button">Refresh</button> <button class="btn" id="logout" type="button">Lock</button></span></div>
+    <ul id="list"></ul>
+  </section>
+</main>
+<script type="module">
+const $ = (s) => document.querySelector(s);
+const KEY = 'pk-admin';
+let pw = '';
+try { pw = sessionStorage.getItem(KEY) || ''; } catch { /* storage blocked */ }
+let options = new Map();
+
+async function loadOptions() {
+  // picture thumbnails come from the main page's data
+  try {
+    const html = await (await fetch('/')).text();
+    const m = html.match(/<script type="application\/json" id="site-data">([\s\S]*?)<\/script>/);
+    options = new Map(JSON.parse(m[1]).options.map((o) => [o.id, o]));
+  } catch { /* thumbnails are optional */ }
+}
+
+async function api(path, init = {}) {
+  const res = await fetch(path, { ...init, headers: { ...(init.headers || {}), authorization: `Bearer ${pw}`, 'content-type': 'application/json' } });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) { const e = new Error(out.error || `Request failed (${res.status})`); e.status = res.status; throw e; }
+  return out;
+}
+
+function say(text) { $('#msg').textContent = text; }
+
+function render(cards) {
+  const list = $('#list');
+  list.replaceChildren();
+  const shown = cards.filter((c) => !c.hidden).length;
+  $('#count').textContent = `${cards.length} postcard${cards.length === 1 ? '' : 's'} · ${shown} on the site`;
+  if (!cards.length) { const li = document.createElement('li'); li.className = 'empty'; li.style.display = 'block'; li.textContent = 'No postcards yet.'; list.append(li); return; }
+  for (const c of cards) {
+    const li = document.createElement('li');
+    if (c.hidden) li.className = 'hidden';
+    const img = document.createElement('img');
+    const o = options.get(c.image);
+    img.alt = ''; if (o) img.src = o.src;
+    const body = document.createElement('div');
+    const who = document.createElement('div'); who.className = 'who';
+    who.textContent = `From ${c.from} · ${new Date(c.created_at).toLocaleString()}`;
+    if (c.hidden) { const t = document.createElement('span'); t.className = 'tag'; t.textContent = 'HIDDEN'; who.append(t); }
+    const note = document.createElement('p'); note.className = 'note'; note.textContent = c.note;
+    const acts = document.createElement('div'); acts.className = 'acts';
+    const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'btn';
+    toggle.textContent = c.hidden ? 'Show on site' : 'Hide';
+    toggle.onclick = () => act(() => api(`/api/admin/postcards/${c.id}`, { method: 'PATCH', body: JSON.stringify({ hidden: !c.hidden }) }), c.hidden ? 'Back on the site.' : 'Hidden from the site.');
+    const del = document.createElement('button'); del.type = 'button'; del.className = 'btn danger'; del.textContent = 'Delete';
+    del.onclick = () => {
+      if (!del.classList.contains('armed')) { del.classList.add('armed'); del.textContent = 'Tap again to delete for good'; setTimeout(() => { del.classList.remove('armed'); del.textContent = 'Delete'; }, 4000); return; }
+      act(() => api(`/api/admin/postcards/${c.id}`, { method: 'DELETE' }), 'Deleted.');
+    };
+    acts.append(toggle, del);
+    body.append(who, note, acts);
+    li.append(img, body);
+    list.append(li);
+  }
+}
+
+async function act(fn, done) {
+  try { await fn(); say(done); await refresh(); } catch (e) { handle(e); }
+}
+function handle(e) {
+  say(e.message);
+  if (e.status === 401) lock();
+}
+async function refresh() {
+  const { postcards } = await api('/api/admin/postcards');
+  render(postcards);
+}
+function lock() {
+  pw = ''; try { sessionStorage.removeItem(KEY); } catch {}
+  $('#box').hidden = true; $('#login').hidden = false; $('#pw').value = '';
+}
+async function open() {
+  try {
+    await refresh();
+    try { sessionStorage.setItem(KEY, pw); } catch {}
+    $('#login').hidden = true; $('#box').hidden = false; say('');
+  } catch (e) { handle(e); }
+}
+
+$('#login').addEventListener('submit', (e) => { e.preventDefault(); pw = $('#pw').value; open(); });
+$('#refresh').addEventListener('click', () => refresh().catch(handle));
+$('#logout').addEventListener('click', () => { lock(); say('Locked.'); });
+await loadOptions();
+if (pw) open();
+</script>
+</body>
+</html>

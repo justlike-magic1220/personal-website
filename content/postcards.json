@@ -1,0 +1,14 @@
+{
+  "_help": "Postcards you add yourself. See HOW-TO-UPDATE.md. style: 'image' = the file IS the whole postcard; 'written' = your photo is placed on the blank postcard with your note. status: published or draft.",
+  "entries": [
+    {
+      "id": "first-postcard",
+      "style": "image",
+      "file": "first-postcard.jpg",
+      "title": "The first postcard",
+      "alt": "A postcard: a figure by a window with glass bowls; on the back, a handwritten note to a random friend.",
+      "status": "published",
+      "order": 10
+    }
+  ]
+}

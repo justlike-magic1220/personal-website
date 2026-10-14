@@ -1,0 +1,13 @@
+{
+  "_help": "Pictures visitors can choose from when they write you a postcard. Files live in images/postcard-options/. Removing an option here does not delete postcards already sent with it (they fall back to the first option).",
+  "entries": [
+    { "id": "seafront-dusk", "file": "seafront-dusk.jpg", "alt": "A seafront promenade at dusk.", "status": "published", "order": 10 },
+    { "id": "evening-traffic", "file": "evening-traffic.jpg", "alt": "A tree-lined road under a pale evening sky.", "status": "published", "order": 20 },
+    { "id": "carved-pavilion", "file": "carved-pavilion.jpg", "alt": "An ornate pavilion with red and gold pillars.", "status": "published", "order": 30 },
+    { "id": "blue-hour-house", "file": "blue-hour-house.jpg", "alt": "A white house and pool under a blue evening sky.", "status": "published", "order": 40 },
+    { "id": "paper-lanterns", "file": "paper-lanterns.jpg", "alt": "Paper lanterns over a restaurant.", "status": "published", "order": 50 },
+    { "id": "lights-along-the-shore", "file": "lights-along-the-shore.jpg", "alt": "A painted coastline dotted with lights.", "status": "published", "order": 60 },
+    { "id": "waves-in-blue", "file": "waves-in-blue.jpg", "alt": "A print of curling blue waves.", "status": "published", "order": 70 },
+    { "id": "neon-stairs", "file": "neon-stairs.jpg", "alt": "A staircase glowing pink and yellow.", "status": "published", "order": 80 }
+  ]
+}

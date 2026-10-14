@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.wrangler/
+.dev.vars
+# original camera files (HEIC/MOV, full size, with location metadata) stay local only
+IomPictures/
+*.log
+functions/_generated/

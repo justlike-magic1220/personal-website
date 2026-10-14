@@ -1,0 +1,17 @@
+# Cloudflare Pages response headers. https://developers.cloudflare.com/pages/configuration/headers/
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Content images have a hash in their name, so they never change.
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=604800
+
+/admin*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
